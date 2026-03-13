@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Farmer Dashboard - FarmaSense</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- Header Fragment -->
+    <div th:replace="fragments/header :: header"></div>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Farmer Dashboard</h2>
+            <div th:if="${!#lists.isEmpty(notifications)}" class="dropdown">
+                <button class="btn btn-outline-success dropdown-toggle position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bell"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" th:text="${#lists.size(notifications)}">
+                        3
+                    </span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="notificationDropdown">
+                    <li class="dropdown-header fw-bold">Recent Alerts</li>
+                    <li th:each="note : ${notifications}">
+                        <a class="dropdown-item py-2 border-bottom" href="#">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1 text-success fw-bold" th:text="${note.title}">Title</h6>
+                                <small class="text-muted" th:text="${#temporals.format(note.timestamp, 'HH:mm')}">12:00</small>
+                            </div>
+                            <p class="mb-1 small text-truncate" style="max-width: 250px;" th:text="${note.message}">Message...</p>
+                        </a>
+                    </li>
+                    <li th:if="${#lists.isEmpty(notifications)}"><a class="dropdown-item text-center text-muted" href="#">No new notifications</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-center text-success fw-bold" href="#">Mark all as read</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Notifications Content Section -->
+        <div class="row mt-4" th:if="${!#lists.isEmpty(notifications)}">
+            <div class="col-12">
+                <div class="alert alert-success shadow-sm border-0 d-flex align-items-center" role="alert" th:each="note, iterStat : ${notifications}" th:if="${iterStat.index < 2}">
+                    <i class="fas fa-info-circle me-3 fa-lg"></i>
+                    <div>
+                        <strong th:text="${note.title}">Title</strong>: <span th:text="${note.message}">Message</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-primary text-white">Weather Updates</div>
+                    <div class="card-body">
+                        <div th:each="weather, iterStat : ${weatherData}" th:if="${iterStat.index < 1}">
+                            <p>Region: <span th:text="${weather.region}">Kigali</span></p>
+                            <p>Forecast: <span th:text="${weather.forecast}">Sunny</span></p>
+                        </div>
+                        <div th:if="${#lists.isEmpty(weatherData)}">
+                            <p>No weather data available.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary btn-sm">View Full Forecast</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-warning text-dark">Crop Advisory</div>
+                    <div class="card-body">
+                        <p>Latest Advice:</p>
+                        <ul th:if="${!#lists.isEmpty(advisories)}">
+                            <li th:each="advisory : ${advisories}"
+                                th:text="${advisory.title} + ': ' + ${advisory.description}">
+                                Late Blight: Spray fungicide.
+                            </li>
+                        </ul>
+                        <p th:if="${#lists.isEmpty(advisories)}">No advisories yet.</p>
+                        <a href="#" class="btn btn-warning btn-sm">View Advisory</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-info text-white">Market Prices</div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush" th:if="${!#lists.isEmpty(marketPrices)}">
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                th:each="price : ${marketPrices}">
+                                <span th:text="${price.crop}">Maize</span>
+                                <span class="badge bg-primary rounded-pill" th:text="${price.price} + ' RWF'">350
+                                    RWF</span>
+                            </li>
+                        </ul>
+                        <p th:if="${#lists.isEmpty(marketPrices)}">No market prices available.</p>
+                        <a href="#" class="btn btn-info btn-sm mt-3 text-white">View All Prices</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Fragment -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

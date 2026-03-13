@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Common Head Content can be defined here if needed, but usually handled in individual pages -->
+</head>
+
+<body>
+
+    <!-- HEADER FRAGMENT -->
+    <header th:fragment="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm fixed-top">
+            <div class="container">
+                <a class="navbar-brand fw-bold" th:href="@{/}">
+                    <i class="fas fa-leaf me-2"></i>FarmaSense
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-light text-success ms-3 fw-bold btn-sm" th:href="@{/login}">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Spacer for fixed navbar -->
+        <div style="height: 70px;"></div>
+    </header>
+
+
+    <!-- FOOTER FRAGMENT -->
+    <footer th:fragment="footer" class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-success"><i class="fas fa-leaf me-2"></i>FarmaSense</h5>
+                    <p class="small text-secondary">Empowering farmers with smart insights on crop prices and weather
+                        patterns.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled small">
+                        <li><a th:href="@{/}" class="text-decoration-none text-light">Home</a></li>
+                        <li><a th:href="@{/dashboard}" class="text-decoration-none text-light">Dashboard</a></li>
+                        <li><a href="#" class="text-decoration-none text-light">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6>Contact Us</h6>
+                    <p class="small text-secondary">
+                        <i class="fas fa-envelope me-2"></i> support@farmasense.com<br>
+                        <i class="fas fa-phone me-2"></i> +1 (555) 123-4567
+                    </p>
+                </div>
+            </div>
+            <hr class="border-secondary">
+            <div class="text-center small text-secondary">
+                &copy; 2026 FarmaSense. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
