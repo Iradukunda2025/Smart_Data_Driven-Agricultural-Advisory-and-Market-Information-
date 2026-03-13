@@ -1,42 +1,7 @@
-<<<<<<< HEAD
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-.kotlin
-
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
-*.iml
-*.ipr
-
-### Eclipse ###
-=======
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### STS ###
->>>>>>> 0f49bd9ec9681ecaed360ba064eb72c0a05c5cb1
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-<<<<<<< HEAD
-=======
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
 .idea
@@ -46,7 +11,26 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
->>>>>>> 0f49bd9ec9681ecaed360ba064eb72c0a05c5cb1
+.idea/dataSources.xml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 
 ### NetBeans ###
 /nbproject/private/
@@ -54,20 +38,15 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
-<<<<<<< HEAD
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-=======
->>>>>>> 0f49bd9ec9681ecaed360ba064eb72c0a05c5cb1
 
 ### VS Code ###
 .vscode/
 
-<<<<<<< HEAD
 ### Mac OS ###
 .DS_Store
-=======
+
 ### Kotlin ###
 .kotlin
->>>>>>> 0f49bd9ec9681ecaed360ba064eb72c0a05c5cb1
