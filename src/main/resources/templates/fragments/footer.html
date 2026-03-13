@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <footer th:fragment="footer" class="bg-dark text-white pt-5 pb-4 mt-auto">
+        <div class="container text-center text-md-start">
+            <div class="row">
+                <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold text-success">FarmaSense</h5>
+                    <p>Optimizing agriculture through smart data-driven advisory and market information systems in Rwanda.</p>
+                </div>
+                <div class="col-md-4 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold text-success">Quick Links</h5>
+                    <p><a th:href="@{/}" class="text-white text-decoration-none">Home</a></p>
+                    <p><a th:href="@{/dashboard}" class="text-white text-decoration-none">Dashboard</a></p>
+                    <p><a href="#" class="text-white text-decoration-none">Market Info</a></p>
+                </div>
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold text-success">Contact</h5>
+                    <p><i class="fas fa-home me-3"></i> Kibuye, Karongi, Rwanda</p>
+                    <p><i class="fas fa-envelope me-3"></i> info@farmasense.rw</p>
+                    <p><i class="fas fa-phone me-3"></i> +250 788 000 000</p>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-7 col-lg-8">
+                    <p> &copy; 2026 Copyright: <strong class="text-success">FarmaSense Project</strong></p>
+                </div>
+                <div class="col-md-5 col-lg-4">
+                    <div class="text-center text-md-end text-white">
+                        <ul class="list-unstyled list-inline mb-0">
+                            <li class="list-inline-item"><a href="#" class="btn-floating btn-sm text-white" style="font-size: 23px;"><i class="fab fa-facebook"></i></a></li>
+                            <li class="list-inline-item"><a href="#" class="btn-floating btn-sm text-white" style="font-size: 23px;"><i class="fab fa-twitter"></i></a></li>
+                            <li class="list-inline-item"><a href="#" class="btn-floating btn-sm text-white" style="font-size: 23px;"><i class="fab fa-whatsapp"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
