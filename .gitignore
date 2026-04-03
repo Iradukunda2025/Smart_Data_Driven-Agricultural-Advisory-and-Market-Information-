@@ -45,6 +45,10 @@ build/
 ### VS Code ###
 .vscode/
 
+### Documentation Report Files ###
+PHASE_7_SECURITY_REPORT.md
+Project_Documentation.md
+
 ### Mac OS ###
 .DS_Store
 
