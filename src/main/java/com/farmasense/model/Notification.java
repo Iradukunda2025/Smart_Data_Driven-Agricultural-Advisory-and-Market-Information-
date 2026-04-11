@@ -14,8 +14,6 @@ public class Notification {
     private String senderRole; // ADMIN, VENDOR, SYSTEM
     private String type; // ADVISORY, MARKET_UPDATE, WEATHER_ALERT
     private LocalDateTime timestamp;
-    private boolean isRead = false;
-
     public Notification() {}
 
     public Notification(String title, String message, String senderRole, String type) {
@@ -39,6 +37,4 @@ public class Notification {
     public void setType(String type) { this.type = type; }
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
-    public boolean isRead() { return isRead; }
-    public void setRead(boolean read) { isRead = read; }
 }

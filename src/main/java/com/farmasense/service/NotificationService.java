@@ -22,10 +22,4 @@ public class NotificationService {
         return notificationRepository.findAllByOrderByTimestampDesc();
     }
     
-    public void markAsRead(Long id) {
-        notificationRepository.findById(id).ifPresent(n -> {
-            n.setRead(true);
-            notificationRepository.save(n);
-        });
-    }
 }

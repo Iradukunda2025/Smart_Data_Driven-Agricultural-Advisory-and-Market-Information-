@@ -72,6 +72,41 @@
         </div>
     </footer>
 
+    <!-- INACTIVITY TIMEOUT SCRIPT -->
+    <script th:inline="javascript">
+        let inactivityTime = function () {
+            let time;
+            let timeoutMinutes = 5;
+            let warningMinutes = 4.5;
+
+            window.onload = resetTimer;
+            document.onmousemove = resetTimer;
+            document.onkeypress = resetTimer;
+            document.onclick = resetTimer;
+            document.onscroll = resetTimer;
+
+            function logout() {
+                alert("Your session has timed out due to inactivity. You will be redirected to the login page.");
+                window.location.href = "/login?logout=timeout";
+            }
+
+            function warn() {
+                console.log("Inactivity warning: session will expire in 30 seconds.");
+            }
+
+            function resetTimer() {
+                clearTimeout(time);
+                time = setTimeout(logout, timeoutMinutes * 60 * 1000);
+                // Optional warning
+                // setTimeout(warn, warningMinutes * 60 * 1000);
+            }
+        };
+        // Activate only for logged in sessions
+        /*[# th:if="${#authorization.expression('isAuthenticated()')}"]*/
+        inactivityTime();
+        /*[/]*/
+    </script>
+
 </body>
 
 </html>

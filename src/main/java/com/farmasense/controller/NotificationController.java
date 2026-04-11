@@ -18,9 +18,4 @@ public class NotificationController {
     public List<Notification> getNotifications() {
         return notificationService.getLatestNotifications();
     }
-
-    @PostMapping("/{id}/read")
-    public void markAsRead(@PathVariable Long id) {
-        notificationService.markAsRead(id);
-    }
 }

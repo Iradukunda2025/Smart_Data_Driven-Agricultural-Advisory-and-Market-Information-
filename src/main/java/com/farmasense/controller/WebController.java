@@ -61,37 +61,88 @@ public class WebController {
 
     @GetMapping("/dashboard")
     public String dashboard(org.springframework.security.core.Authentication authentication) {
-        if (authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_FARMER"))) {
-            return "redirect:/dashboard/farmer";
-        } else if (authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_VENDOR"))) {
-            return "redirect:/dashboard/vendor";
-        } else if (authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            return "redirect:/dashboard/admin";
+        try {
+            if (authentication != null && authentication.isAuthenticated()) {
+                String roles = authentication.getAuthorities().toString().toUpperCase();
+                System.out.println("!!! LOGIN SUCCESS: " + authentication.getName() + " [ " + roles + " ]");
+                
+                if (roles.contains("ADMIN")) return "redirect:/dashboard/admin";
+                if (roles.contains("VENDOR")) return "redirect:/dashboard/vendor";
+                if (roles.contains("FARMER")) return "redirect:/dashboard/farmer";
+            }
+            return "redirect:/login";
+        } catch (Exception e) {
+            System.err.println("!!! REDIRECT ERROR: " + e.getMessage());
+            return "redirect:/login?error=true";
         }
-        return "dashboard"; // Fallback
     }
 
     @GetMapping("/dashboard/farmer")
     public String farmerDashboard(org.springframework.ui.Model model) {
-        model.addAttribute("advisories", advisoryRepository.findAll());
-        model.addAttribute("marketPrices", marketPriceRepository.findAll());
-        model.addAttribute("weatherData", weatherInfoRepository.findAll());
-        model.addAttribute("notifications", notificationService.getLatestNotifications());
-        return "farmer_dashboard";
+        try {
+            model.addAttribute("advisories", advisoryRepository != null ? advisoryRepository.findAll() : java.util.Collections.emptyList());
+            model.addAttribute("marketPrices", marketPriceRepository != null ? marketPriceRepository.findAll() : java.util.Collections.emptyList());
+            model.addAttribute("weatherRecords", weatherInfoRepository != null ? weatherInfoRepository.findAll() : java.util.Collections.emptyList());
+            model.addAttribute("notifications", notificationService != null ? notificationService.getLatestNotifications() : java.util.Collections.emptyList());
+            return "farmer_dashboard";
+        } catch (Exception e) {
+            model.addAttribute("advisories", java.util.Collections.emptyList());
+            model.addAttribute("marketPrices", java.util.Collections.emptyList());
+            model.addAttribute("weatherRecords", java.util.Collections.emptyList());
+            model.addAttribute("notifications", java.util.Collections.emptyList());
+            return "farmer_dashboard";
+        }
     }
 
     @GetMapping("/dashboard/vendor")
     public String vendorDashboard(org.springframework.ui.Model model) {
-        model.addAttribute("marketPrices", marketPriceRepository.findAll());
-        return "vendor_dashboard";
+        try {
+            java.util.List<?> prices = (marketPriceRepository != null) ? marketPriceRepository.findAll() : java.util.Collections.emptyList();
+            java.util.List<?> notice = (notificationService != null) ? notificationService.getLatestNotifications() : java.util.Collections.emptyList();
+            
+            model.addAttribute("marketPrices", prices != null ? prices : java.util.Collections.emptyList());
+            model.addAttribute("notifications", notice != null ? notice : java.util.Collections.emptyList());
+            
+            // Shared fragment stabilizers
+            model.addAttribute("users", java.util.Collections.emptyList());
+            model.addAttribute("weatherRecords", java.util.Collections.emptyList());
+            model.addAttribute("advisories", java.util.Collections.emptyList());
+            
+            return "vendor_dashboard";
+        } catch (Exception e) {
+            System.err.println("!!! FINAL FAILSAFE TRIGGERED: " + e.getMessage());
+            model.addAttribute("marketPrices", java.util.Collections.emptyList());
+            model.addAttribute("notifications", java.util.Collections.emptyList());
+            model.addAttribute("users", java.util.Collections.emptyList());
+            model.addAttribute("weatherRecords", java.util.Collections.emptyList());
+            model.addAttribute("advisories", java.util.Collections.emptyList());
+            return "vendor_dashboard";
+        }
     }
 
     @GetMapping("/dashboard/admin")
     public String adminDashboard(org.springframework.ui.Model model) {
-        model.addAttribute("weatherData", weatherInfoRepository.findAll());
-        model.addAttribute("totalUsers", userRepository.count());
-        model.addAttribute("totalAdvisories", advisoryRepository.count());
-        return "admin_dashboard";
+        try {
+            model.addAttribute("users", 
+                userRepository != null ? userRepository.findAll() : java.util.Collections.emptyList());
+            model.addAttribute("marketPrices", 
+                marketPriceRepository != null ? marketPriceRepository.findAll() : java.util.Collections.emptyList());
+            model.addAttribute("weatherRecords", 
+                weatherInfoRepository != null ? weatherInfoRepository.findAll() : java.util.Collections.emptyList());
+            model.addAttribute("advisories", 
+                advisoryRepository != null ? advisoryRepository.findAll() : java.util.Collections.emptyList());
+            model.addAttribute("notifications", 
+                notificationService != null ? notificationService.getLatestNotifications() : java.util.Collections.emptyList());
+            return "admin_dashboard";
+        } catch (Exception e) {
+            System.err.println("!!! ADMIN DASHBOARD ERROR: " + e.getMessage());
+            model.addAttribute("users", java.util.Collections.emptyList());
+            model.addAttribute("marketPrices", java.util.Collections.emptyList());
+            model.addAttribute("weatherRecords", java.util.Collections.emptyList());
+            model.addAttribute("advisories", java.util.Collections.emptyList());
+            model.addAttribute("notifications", java.util.Collections.emptyList());
+            return "admin_dashboard";
+        }
     }
 
     @GetMapping("/admin/users")
@@ -101,37 +152,58 @@ public class WebController {
         return "users";
     }
 
-    @GetMapping("/admin/advisories")
-    public String manageAdvisories(org.springframework.ui.Model model) {
-        model.addAttribute("advisories", advisoryRepository.findAll());
-        model.addAttribute("crops", cropRepository.findAll());
+    @GetMapping("/advisories")
+    public String viewAdvisories(org.springframework.ui.Model model) {
+        model.addAttribute("advisories", advisoryRepository != null ? advisoryRepository.findAll() : java.util.Collections.emptyList());
+        model.addAttribute("crops", cropRepository != null ? cropRepository.findAll() : java.util.Collections.emptyList());
+        model.addAttribute("marketPrices", java.util.Collections.emptyList());
+        model.addAttribute("weatherRecords", java.util.Collections.emptyList());
+        model.addAttribute("notifications", java.util.Collections.emptyList());
         return "advisories";
     }
 
     @GetMapping("/weather")
     public String manageWeather(org.springframework.ui.Model model) {
-        model.addAttribute("weatherData", weatherInfoRepository.findAll());
+        model.addAttribute("weatherData", weatherInfoRepository != null ? weatherInfoRepository.findAll() : java.util.Collections.emptyList());
+        model.addAttribute("weatherRecords", weatherInfoRepository != null ? weatherInfoRepository.findAll() : java.util.Collections.emptyList());
+        model.addAttribute("marketPrices", java.util.Collections.emptyList());
+        model.addAttribute("advisories", java.util.Collections.emptyList());
+        model.addAttribute("notifications", java.util.Collections.emptyList());
         return "weather";
     }
 
     @GetMapping("/market")
     public String manageMarket(org.springframework.ui.Model model) {
-        model.addAttribute("marketPrices", marketPriceRepository.findAll());
-        model.addAttribute("crops", cropRepository.findAll());
+        model.addAttribute("marketPrices", marketPriceRepository != null ? marketPriceRepository.findAll() : java.util.Collections.emptyList());
+        model.addAttribute("crops", cropRepository != null ? cropRepository.findAll() : java.util.Collections.emptyList());
+        model.addAttribute("advisories", java.util.Collections.emptyList());
+        model.addAttribute("weatherRecords", java.util.Collections.emptyList());
+        model.addAttribute("notifications", java.util.Collections.emptyList());
         return "market";
     }
 
     @GetMapping("/vendor/my-prices")
     public String vendorStore(org.springframework.ui.Model model) {
-        model.addAttribute("marketPrices", marketPriceRepository.findAll()); // Ideally filtered by vendor, but using all for now until relationship is deeper
-        model.addAttribute("crops", cropRepository.findAll());
+        model.addAttribute("marketPrices", marketPriceRepository.findAll()); 
+        model.addAttribute("notifications", notificationService.getLatestNotifications());
         return "vendor_store";
     }
 
     @org.springframework.web.bind.annotation.PostMapping("/admin/weather/sync")
-    public String syncWeather() {
-        meteoRwandaService.syncWeatherData();
-        return "redirect:/dashboard/admin?synced";
+    public String syncWeather(java.security.Principal principal) {
+        try {
+            meteoRwandaService.syncWeatherData();
+            String updater = (principal != null) ? principal.getName() : "Administrator";
+            notificationService.createNotification("Weather Updated", "New weather data has been synchronized by " + updater, "ADMIN", "WEATHER");
+            return "redirect:/dashboard/admin?synced";
+        } catch (Exception e) {
+            String rawMsg = e.getMessage() != null ? e.getMessage() : "Sync failed";
+            String encodedMsg = "error";
+            try {
+                encodedMsg = java.net.URLEncoder.encode(rawMsg, "UTF-8");
+            } catch (Exception ex) {}
+            return "redirect:/dashboard/admin?error=" + encodedMsg;
+        }
     }
 
     @GetMapping("/signup")
@@ -141,62 +213,163 @@ public class WebController {
 
     @org.springframework.web.bind.annotation.PostMapping("/signup")
     public String registerUser(@org.springframework.web.bind.annotation.RequestParam String username,
+                               @org.springframework.web.bind.annotation.RequestParam String email,
+                               @org.springframework.web.bind.annotation.RequestParam String fullName,
+                               @org.springframework.web.bind.annotation.RequestParam String phoneNumber,
                                @org.springframework.web.bind.annotation.RequestParam String password,
-                               @org.springframework.web.bind.annotation.RequestParam String role) {
-        userService.registerUser(username, password, role);
-        return "redirect:/login?success";
+                               @org.springframework.web.bind.annotation.RequestParam String role,
+                               org.springframework.ui.Model model) {
+        try {
+            userService.registerUser(username, email, fullName, phoneNumber, password, role);
+            return "redirect:/login?registered";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "signup";
+        }
     }
     @PostMapping("/admin/advisories/add")
-    public String addAdvisory(@RequestParam String title, @RequestParam String description, @RequestParam String date) {
-        com.farmasense.model.Advisory advisory = new com.farmasense.model.Advisory();
-        advisory.setTitle(title);
-        advisory.setDescription(description);
-        advisory.setDate(java.time.LocalDate.parse(date));
-        advisoryRepository.save(advisory);
-        return "redirect:/admin/advisories?success";
+    public String addAdvisory(@RequestParam String title, @RequestParam String description, @RequestParam String date, java.security.Principal principal) {
+        try {
+            com.farmasense.model.Advisory advisory = new com.farmasense.model.Advisory();
+            advisory.setTitle(title);
+            advisory.setDescription(description);
+            if (date != null && !date.isEmpty()) {
+                advisory.setDate(java.time.LocalDate.parse(date));
+            } else {
+                advisory.setDate(java.time.LocalDate.now());
+            }
+            advisoryRepository.save(advisory);
+            
+            String updater = (principal != null) ? principal.getName() : "Expert";
+            if (notificationService != null) {
+                notificationService.createNotification("New Advisory", "A new agricultural advisory has been posted: " + title + " (by " + updater + ")", "ADMIN", "ADVISORY");
+            }
+            return "redirect:/advisories?success";
+        } catch (Exception e) {
+            return "redirect:/advisories?error";
+        }
     }
 
     @PostMapping("/admin/advisories/delete")
     public String deleteAdvisory(@RequestParam Long id) {
-        advisoryRepository.deleteById(id);
-        return "redirect:/admin/advisories?deleted";
+        try {
+            if (advisoryRepository.existsById(id)) {
+                advisoryRepository.deleteById(id);
+                return "redirect:/admin/advisories?deleted";
+            }
+        } catch (Exception e) {
+            return "redirect:/admin/advisories?error";
+        }
+        return "redirect:/admin/advisories";
+    }
+
+    @PostMapping("/admin/advisories/update")
+    public String updateAdvisory(@RequestParam Long id, @RequestParam String title, @RequestParam String description, @RequestParam String date) {
+        try {
+            com.farmasense.model.Advisory advisory = advisoryRepository.findById(id).orElseThrow();
+            advisory.setTitle(title);
+            advisory.setDescription(description);
+            advisory.setDate(java.time.LocalDate.parse(date));
+            advisoryRepository.save(advisory);
+            return "redirect:/admin/advisories?updated";
+        } catch (Exception e) {
+            return "redirect:/admin/advisories?error=" + (e.getMessage() != null ? e.getMessage() : "Update failed");
+        }
     }
 
     @PostMapping("/admin/weather/add")
-    public String addWeather(@RequestParam String region, @RequestParam String forecast, @RequestParam String date) {
-        com.farmasense.model.WeatherInfo weather = new com.farmasense.model.WeatherInfo();
-        weather.setRegion(region);
-        weather.setForecast(forecast);
-        weather.setDate(java.time.LocalDate.parse(date));
-        weatherInfoRepository.save(weather);
-        return "redirect:/weather?success";
+    public String addWeather(@RequestParam String region, @RequestParam String forecast, @RequestParam String date, java.security.Principal principal) {
+        try {
+            com.farmasense.model.WeatherInfo weather = new com.farmasense.model.WeatherInfo();
+            weather.setRegion(region);
+            weather.setForecast(forecast);
+            weather.setDate(java.time.LocalDate.parse(date));
+            weatherInfoRepository.save(weather);
+            
+            String updater = (principal != null) ? principal.getName() : "Forecaster";
+            notificationService.createNotification("Weather Info Updated", "Weather forecast for " + region + " has been updated by " + updater, "ADMIN", "WEATHER");
+            
+            return "redirect:/weather?success";
+        } catch (Exception e) {
+            return "redirect:/weather?error=" + (e.getMessage() != null ? e.getMessage() : "Unknown error");
+        }
     }
 
     @PostMapping("/admin/weather/delete")
     public String deleteWeather(@RequestParam Long id) {
-        weatherInfoRepository.deleteById(id);
-        return "redirect:/weather?deleted";
+        try {
+            if (weatherInfoRepository.existsById(id)) {
+                weatherInfoRepository.deleteById(id);
+                return "redirect:/weather?deleted";
+            }
+        } catch (Exception e) {
+            return "redirect:/weather?error";
+        }
+        return "redirect:/weather";
     }
 
     @PostMapping("/admin/market/add")
-    public String addMarketPrice(@RequestParam String crop, @RequestParam Double price, @RequestParam String date) {
-        com.farmasense.model.MarketPrice marketPrice = new com.farmasense.model.MarketPrice();
-        marketPrice.setCrop(crop);
-        marketPrice.setPrice(price);
-        marketPrice.setDate(java.time.LocalDate.parse(date));
-        marketPriceRepository.save(marketPrice);
-        return "redirect:/market?success";
+    public String addMarketPrice(@RequestParam String crop, @RequestParam Double price, @RequestParam String date, java.security.Principal principal) {
+        try {
+            com.farmasense.model.MarketPrice marketPrice = new com.farmasense.model.MarketPrice();
+            marketPrice.setCrop(crop);
+            marketPrice.setPrice(price);
+            if (date != null && !date.isEmpty()) {
+                marketPrice.setDate(java.time.LocalDate.parse(date));
+            } else {
+                marketPrice.setDate(java.time.LocalDate.now());
+            }
+            marketPriceRepository.save(marketPrice);
+            
+            String updater = (principal != null) ? principal.getName() : "Vendor";
+            if (notificationService != null) {
+                notificationService.createNotification("Market Price Updated", "The price for " + crop + " has been updated to " + price + " RWF by " + updater, "VENDOR", "MARKET");
+            }
+            return "redirect:/market?success";
+        } catch (Exception e) {
+            return "redirect:/market?error";
+        }
     }
 
     @PostMapping("/admin/market/delete")
     public String deleteMarketPrice(@RequestParam Long id) {
-        marketPriceRepository.deleteById(id);
-        return "redirect:/market?deleted";
+        try {
+            if (marketPriceRepository.existsById(id)) {
+                marketPriceRepository.deleteById(id);
+                return "redirect:/market?deleted";
+            }
+        } catch (Exception e) {
+            return "redirect:/market?error";
+        }
+        return "redirect:/market";
+    }
+
+    @PostMapping("/admin/market/update")
+    public String updateMarketPrice(@RequestParam Long id, @RequestParam String crop, @RequestParam Double price, @RequestParam String date) {
+        try {
+            com.farmasense.model.MarketPrice marketPrice = marketPriceRepository.findById(id).orElseThrow();
+            marketPrice.setCrop(crop);
+            marketPrice.setPrice(price);
+            if (date != null && !date.isEmpty()) {
+                marketPrice.setDate(java.time.LocalDate.parse(date));
+            }
+            marketPriceRepository.save(marketPrice);
+            return "redirect:/market?updated";
+        } catch (Exception e) {
+            return "redirect:/market?error";
+        }
     }
 
     @PostMapping("/admin/users/delete")
     public String deleteUser(@RequestParam Long id) {
-        userRepository.deleteById(id);
-        return "redirect:/admin/users?deleted";
+        try {
+            if (userRepository.existsById(id)) {
+                userRepository.deleteById(id);
+                return "redirect:/admin/users?deleted";
+            }
+        } catch (Exception e) {
+            return "redirect:/admin/users?error";
+        }
+        return "redirect:/admin/users";
     }
 }

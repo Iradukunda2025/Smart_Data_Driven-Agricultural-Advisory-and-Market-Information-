@@ -1,113 +1,123 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Farmer Dashboard - FarmaSense</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-
 <body class="bg-light d-flex flex-column min-vh-100">
-
-    <!-- Header Fragment -->
     <div th:replace="fragments/header :: header"></div>
 
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2>Farmer Dashboard</h2>
-            <div th:if="${!#lists.isEmpty(notifications)}" class="dropdown">
-                <button class="btn btn-outline-success dropdown-toggle position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-bell"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" th:text="${#lists.size(notifications)}">
-                        3
-                    </span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="notificationDropdown">
-                    <li class="dropdown-header fw-bold">Recent Alerts</li>
-                    <li th:each="note : ${notifications}">
-                        <a class="dropdown-item py-2 border-bottom" href="#">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1 text-success fw-bold" th:text="${note.title}">Title</h6>
-                                <small class="text-muted" th:text="${#temporals.format(note.timestamp, 'HH:mm')}">12:00</small>
-                            </div>
-                            <p class="mb-1 small text-truncate" style="max-width: 250px;" th:text="${note.message}">Message...</p>
-                        </a>
-                    </li>
-                    <li th:if="${#lists.isEmpty(notifications)}"><a class="dropdown-item text-center text-muted" href="#">No new notifications</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-center text-success fw-bold" href="#">Mark all as read</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Notifications Content Section -->
-        <div class="row mt-4" th:if="${!#lists.isEmpty(notifications)}">
+    <div class="container mt-4 flex-grow-1 mb-5">
+        <div class="row g-4">
+            <!-- Welcome Header -->
             <div class="col-12">
-                <div class="alert alert-success shadow-sm border-0 d-flex align-items-center" role="alert" th:each="note, iterStat : ${notifications}" th:if="${iterStat.index < 2}">
-                    <i class="fas fa-info-circle me-3 fa-lg"></i>
-                    <div>
-                        <strong th:text="${note.title}">Title</strong>: <span th:text="${note.message}">Message</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-primary text-white">Weather Updates</div>
-                    <div class="card-body">
-                        <div th:each="weather, iterStat : ${weatherData}" th:if="${iterStat.index < 1}">
-                            <p>Region: <span th:text="${weather.region}">Kigali</span></p>
-                            <p>Forecast: <span th:text="${weather.forecast}">Sunny</span></p>
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #198754 0%, #0d6efd 100%);">
+                    <div class="card-body p-5 text-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h1 class="fw-bold mb-2">Welcome to your Farmer Portal</h1>
+                                <p class="lead opacity-75 mb-4">Empowering your farm with real-time data and expert advice.</p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-white bg-opacity-25 rounded-pill px-3 py-2"><i class="fas fa-seedling me-2"></i>Smart Advisory</span>
+                                    <span class="badge bg-white bg-opacity-25 rounded-pill px-3 py-2"><i class="fas fa-cloud-rain me-2"></i>Weather Alerts</span>
+                                    <span class="badge bg-white bg-opacity-25 rounded-pill px-3 py-2"><i class="fas fa-magnifying-glass-chart me-2"></i>Live Markets</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end d-none d-md-block">
+                                <div class="p-3 bg-white bg-opacity-10 rounded-4 border border-white border-opacity-25">
+                                    <small class="d-block opacity-75">Student Project by</small>
+                                    <h5 class="fw-bold mb-0">IRADUKUNDA J.D.D</h5>
+                                    <small class="opacity-75">Reg No: 24RP04674</small>
+                                </div>
+                            </div>
                         </div>
-                        <div th:if="${#lists.isEmpty(weatherData)}">
-                            <p>No weather data available.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather Card -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                    <div class="card-header bg-warning py-3 text-center border-0">
+                        <h6 class="fw-bold mb-0"><i class="fas fa-sun-cloud me-2"></i>Local Weather Outlook</h6>
+                    </div>
+                    <div class="card-body text-center p-4">
+                        <div th:each="w : ${#lists.size(weatherRecords) > 0 ? weatherRecords.subList(0, 1) : weatherRecords}">
+                            <div class="display-3 fw-bold text-dark mb-0" th:text="${w.forecast.contains('°C') ? w.forecast : '24°C'}">24°C</div>
+                            <h5 class="fw-bold text-muted mb-3" th:text="${w.region}">Region</h5>
+                            <p class="small text-secondary mb-0" th:text="${w.forecast}">Clear skies with moderate winds.</p>
                         </div>
-                        <a href="#" class="btn btn-primary btn-sm">View Full Forecast</a>
+                        <div th:if="${#lists.isEmpty(weatherRecords)}" class="py-4">
+                            <i class="fas fa-cloud-moon fa-3x text-light mb-3"></i>
+                            <p class="text-muted">Weather data syncing...</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-warning text-dark">Crop Advisory</div>
-                    <div class="card-body">
-                        <p>Latest Advice:</p>
-                        <ul th:if="${!#lists.isEmpty(advisories)}">
-                            <li th:each="advisory : ${advisories}"
-                                th:text="${advisory.title} + ': ' + ${advisory.description}">
-                                Late Blight: Spray fungicide.
-                            </li>
-                        </ul>
-                        <p th:if="${#lists.isEmpty(advisories)}">No advisories yet.</p>
-                        <a href="#" class="btn btn-warning btn-sm">View Advisory</a>
+
+            <!-- Advisory Feed -->
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h6 class="fw-bold mb-0 text-success"><i class="fas fa-graduation-cap me-2"></i>New Farming Advisories</h6>
+                    </div>
+                    <div class="list-group list-group-flush border-top">
+                        <div th:each="adv : ${advisories}" class="list-group-item bg-transparent p-4 border-0 border-bottom">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="fw-bold mb-1" th:text="${adv.title}">Advisory Title</h5>
+                                <span class="badge bg-light text-success border" th:text="${adv.date}">Today</span>
+                            </div>
+                            <p class="text-secondary mb-3" th:text="${adv.description}">Advisory description goes here.</p>
+                            <button class="btn btn-sm btn-outline-success rounded-pill px-3">Read Full Guide</button>
+                        </div>
+                        <div th:if="${#lists.isEmpty(advisories)}" class="p-5 text-center text-muted">
+                            <i class="fas fa-book-open fa-3x mb-3 opacity-25"></i>
+                            <p>No new advisories today. Keep checking!</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-info text-white">Market Prices</div>
-                    <div class="card-body">
-                        <ul class="list-group list-group-flush" th:if="${!#lists.isEmpty(marketPrices)}">
-                            <li class="list-group-item d-flex justify-content-between align-items-center"
-                                th:each="price : ${marketPrices}">
-                                <span th:text="${price.crop}">Maize</span>
-                                <span class="badge bg-primary rounded-pill" th:text="${price.price} + ' RWF'">350
-                                    RWF</span>
-                            </li>
-                        </ul>
-                        <p th:if="${#lists.isEmpty(marketPrices)}">No market prices available.</p>
-                        <a href="#" class="btn btn-info btn-sm mt-3 text-white">View All Prices</a>
+
+            <!-- Market Watch -->
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h6 class="fw-bold mb-0"><i class="fas fa-chart-line me-2 text-primary"></i>Live Marketplace Overview</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Commodity</th>
+                                    <th>Recent Price</th>
+                                    <th>Trend</th>
+                                    <th class="text-end pe-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="p : ${marketPrices}">
+                                    <td class="ps-4 fw-bold" th:text="${p.crop}">Potato</td>
+                                    <td><span class="text-success fw-bold" th:text="${p.price + ' RWF'}">500 RWF</span> <small class="text-muted">/kg</small></td>
+                                    <td><span class="badge bg-success bg-opacity-10 text-success rounded-pill"><i class="fas fa-arrow-up me-1"></i>Stable</span></td>
+                                    <td class="text-end pe-4">
+                                        <a href="/market" class="btn btn-sm btn-light border rounded-pill px-3 shadow-sm">Details</a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(marketPrices)}">
+                                    <td colspan="4" class="text-center py-5 text-muted small border-top">No marketplace data available.</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer Fragment -->
     <div th:replace="fragments/footer :: footer"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

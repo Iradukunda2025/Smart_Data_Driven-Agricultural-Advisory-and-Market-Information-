@@ -72,7 +72,25 @@ public class DataInitializationService {
             java.util.Set<Role> roles = new java.util.HashSet<>();
             roles.add(adminRole);
             User admin = new User("admin", passwordEncoder.encode("admin123"), roles);
+            admin.setEmail("admin@farmasense.rw");
+            admin.setFullName("System Administrator");
+            admin.setPhoneNumber("0780000000");
+            admin.setEnabled(true);
+            admin.setVerified(true);
             userRepository.save(admin);
+        }
+
+        // Initialize Vendor User
+        if (userRepository.findByUsername("vendor").isEmpty()) {
+            java.util.Set<Role> roles = new java.util.HashSet<>();
+            roles.add(vendorRole);
+            User vendor = new User("vendor", passwordEncoder.encode("vendor123"), roles);
+            vendor.setEmail("vendor@farmasense.rw");
+            vendor.setFullName("Default Vendor");
+            vendor.setPhoneNumber("0781111111");
+            vendor.setEnabled(true);
+            vendor.setVerified(true);
+            userRepository.save(vendor);
         }
     }
 

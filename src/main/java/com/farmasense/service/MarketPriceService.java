@@ -5,6 +5,7 @@ import com.farmasense.repository.MarketPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,26 @@ public class MarketPriceService {
 
     public List<MarketPrice> getAllMarketPrices() {
         return marketPriceRepository.findAll();
+    }
+
+    /**
+     * Flexible filter: supply any combination of crop, fromDate, toDate.
+     * Null parameters are simply ignored.
+     */
+    public List<MarketPrice> getByFilters(String crop, LocalDate from, LocalDate to) {
+        boolean hasCrop = crop != null && !crop.isBlank();
+        boolean hasFrom = from != null;
+        boolean hasTo   = to   != null;
+
+        if (hasCrop && hasFrom && hasTo) {
+            return marketPriceRepository.findByCropIgnoreCaseAndDateBetween(crop, from, to);
+        } else if (hasCrop) {
+            return marketPriceRepository.findByCropIgnoreCase(crop);
+        } else if (hasFrom && hasTo) {
+            return marketPriceRepository.findByDateBetween(from, to);
+        } else {
+            return marketPriceRepository.findAll();
+        }
     }
 
     public Optional<MarketPrice> getMarketPriceById(Long id) {

@@ -1,42 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <body>
-    <footer th:fragment="footer" class="bg-dark text-white pt-5 pb-4 mt-auto">
-        <div class="container text-center text-md-start">
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 font-weight-bold text-success">FarmaSense</h5>
-                    <p>Optimizing agriculture through smart data-driven advisory and market information systems in Rwanda.</p>
+    <footer th:fragment="footer" class="bg-dark text-white py-5 mt-auto"
+        style="background: linear-gradient(135deg, #131720 0%, #000000 100%); border-top: 4px solid #198754;">
+        <div class="container text-center">
+            <div class="mb-4 d-flex justify-content-center align-items-center gap-3">
+                <div class="bg-white rounded-circle p-2 shadow-sm"
+                    style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-leaf text-success fa-lg"></i>
                 </div>
-                <div class="col-md-4 col-lg-2 col-xl-2 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 font-weight-bold text-success">Quick Links</h5>
-                    <p><a th:href="@{/}" class="text-white text-decoration-none">Home</a></p>
-                    <p><a th:href="@{/dashboard}" class="text-white text-decoration-none">Dashboard</a></p>
-                    <p><a href="#" class="text-white text-decoration-none">Market Info</a></p>
-                </div>
-                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 font-weight-bold text-success">Contact</h5>
-                    <p><i class="fas fa-home me-3"></i> Kibuye, Karongi, Rwanda</p>
-                    <p><i class="fas fa-envelope me-3"></i> info@farmasense.rw</p>
-                    <p><i class="fas fa-phone me-3"></i> +250 788 000 000</p>
+                <div class="text-start">
+                    <h5 class="fw-bold mb-0 text-white" style="letter-spacing: 1px;">RP <span
+                            class="text-success">KARONGI</span> COLLEGE</h5>
+                    <small class="text-secondary text-uppercase fw-semibold" style="font-size: 0.65rem;">Technology for
+                        Sustainable Agriculture</small>
                 </div>
             </div>
-            <hr class="mb-4">
-            <div class="row align-items-center">
-                <div class="col-md-7 col-lg-8">
-                    <p> &copy; 2026 Copyright: <strong class="text-success">FarmaSense Project</strong></p>
-                </div>
-                <div class="col-md-5 col-lg-4">
-                    <div class="text-center text-md-end text-white">
-                        <ul class="list-unstyled list-inline mb-0">
-                            <li class="list-inline-item"><a href="#" class="btn-floating btn-sm text-white" style="font-size: 23px;"><i class="fab fa-facebook"></i></a></li>
-                            <li class="list-inline-item"><a href="#" class="btn-floating btn-sm text-white" style="font-size: 23px;"><i class="fab fa-twitter"></i></a></li>
-                            <li class="list-inline-item"><a href="#" class="btn-floating btn-sm text-white" style="font-size: 23px;"><i class="fab fa-whatsapp"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
+
+            <p class="text-secondary small mb-4 opacity-75">Smart Data-Driven Agricultural Advisory and Market
+                Information System</p>
+
+            <div
+                class="bg-white bg-opacity-5 p-3 rounded-pill d-inline-block border border-white border-opacity-10 mb-4 shadow-sm px-5">
+                <p class="text-white fw-bold small mb-0">
+                    <i class="fas fa-user-graduate me-2 text-success"></i>
+                    System Developer: <span class="text-uppercase">IRADUKUNDA Jean De Dieu</span>
+                    <span class="mx-3 opacity-25">|</span>
+                    Student ID: <span class="text-success">24RP04674</span>
+                </p>
+            </div>
+
+            <div class="mt-2">
+                <span
+                    class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10 px-4 py-2 rounded-pill small">
+                    <i class="fas fa-check-circle me-1"></i>System Operational
+                </span>
             </div>
         </div>
     </footer>
 </body>
+
 </html>

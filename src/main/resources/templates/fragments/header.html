@@ -1,81 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
 <body>
-    <header th:fragment="header">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm py-3">
-            <div class="container">
-                <a class="navbar-brand fw-bold d-flex align-items-center" th:href="@{/}">
-                    <i class="fas fa-leaf me-2"></i>
-                    <span>FarmaSense</span>
-                </a>
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" th:href="@{/dashboard}">
-                                <i class="fas fa-home me-1"></i> Dashboard
-                            </a>
-                        </li>
-                        
-                        <!-- Role-based Menus -->
-                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                            <a class="nav-link" th:href="@{/admin/users}">
-                                <i class="fas fa-users me-1"></i> Users
-                            </a>
-                        </li>
-                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                            <a class="nav-link" th:href="@{/admin/advisories}">
-                                <i class="fas fa-graduation-cap me-1"></i> Advisories
-                            </a>
-                        </li>
-                        <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'FARMER')">
-                            <a class="nav-link" th:href="@{/weather}">
-                                <i class="fas fa-cloud-sun me-1"></i> Weather
-                            </a>
-                        </li>
-                        <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'VENDOR', 'FARMER')">
-                            <a class="nav-link" th:href="@{/market}">
-                                <i class="fas fa-chart-line me-1"></i> Market Prices
-                            </a>
-                        </li>
-                        <li class="nav-item" sec:authorize="hasRole('VENDOR')">
-                            <a class="nav-link" th:href="@{/vendor/my-prices}">
-                                <i class="fas fa-store me-1"></i> My Store
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="d-flex align-items-center">
-                        <div class="dropdown me-3" sec:authorize="isAuthenticated()">
-                            <button class="btn btn-link text-white text-decoration-none dropdown-toggle p-0" type="button" id="userMenu" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle fa-lg me-1"></i>
-                                <span th:text="${#authentication.name}">User</span>
+    <header th:fragment="header" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3" style="border-bottom: 2px solid #198754; background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px);">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center fw-bold" th:href="@{/dashboard}" style="font-size: 1.4rem; letter-spacing: -0.5px;">
+                <div class="bg-success rounded-3 p-2 me-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                    <i class="fas fa-leaf text-white small"></i>
+                </div>
+                <span>Farma<span class="text-success">Sense</span></span>
+            </a>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav ms-auto gap-2 align-items-center">
+                    <li class="nav-item"><a class="nav-link px-3 fw-semibold" th:href="@{/dashboard}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link px-3 fw-semibold" th:href="@{/market}">Market</a></li>
+                    <li class="nav-item"><a class="nav-link px-3 fw-semibold" th:href="@{/advisories}">Advisory</a></li>
+                    <li class="nav-item"><a class="nav-link px-3 fw-semibold" th:href="@{/weather}">Weather</a></li>
+                    <li class="nav-item ms-lg-3" sec:authorize="isAuthenticated()">
+                        <div class="dropdown">
+                            <button class="btn btn-success rounded-pill px-4 fw-bold shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-2"></i><span sec:authentication="name">Account</span>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3">
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-id-card me-2"></i> Profile</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form th:action="@{/logout}" method="post" class="px-3">
-                                        <button type="submit" class="btn btn-danger btn-sm w-100 mt-1">
-                                            <i class="fas fa-sign-out-alt me-1"></i> Logout
-                                        </button>
-                                    </form>
-                                </li>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 rounded-4 p-2">
+                                <li><a class="dropdown-item rounded-3 py-2 text-danger fw-bold" th:href="@{/login?logout}"><i class="fas fa-power-off me-2"></i>Sign Out</a></li>
                             </ul>
                         </div>
-                        <div sec:authorize="!isAuthenticated()">
-                            <a th:href="@{/login}" class="btn btn-outline-light btn-sm px-4 rounded-pill me-2">Login</a>
-                            <a th:href="@{/signup}" class="btn btn-light btn-sm px-4 rounded-pill text-success fw-bold">Sign Up</a>
-                        </div>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
     </header>
 </body>
 </html>

@@ -16,4 +16,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/FarmaSense_war_exploded").setViewName("forward:/index");
         registry.addViewController("/FarmaSense_war_exploded/").setViewName("forward:/index");
     }
+
+    @org.springframework.context.annotation.Bean
+    public org.thymeleaf.extras.java8time.dialect.Java8TimeDialect java8TimeDialect() {
+        return new org.thymeleaf.extras.java8time.dialect.Java8TimeDialect();
+    }
 }
