@@ -3,7 +3,7 @@
 <body>
     <header th:fragment="header" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3" style="border-bottom: 2px solid #198754; background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px);">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center fw-bold" th:href="@{/dashboard}" style="font-size: 1.4rem; letter-spacing: -0.5px;">
+            <a class="navbar-brand d-flex align-items-center fw-bold" th:href="${#authorization.expression('isAuthenticated()') ? '/dashboard' : '/'}" style="font-size: 1.4rem; letter-spacing: -0.5px;">
                 <div class="bg-success rounded-3 p-2 me-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
                     <i class="fas fa-leaf text-white small"></i>
                 </div>
@@ -14,10 +14,17 @@
             </button>
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav ms-auto gap-2 align-items-center">
-                    <li class="nav-item"><a class="nav-link px-3 fw-semibold" th:href="@{/dashboard}">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link px-3 fw-semibold" th:href="@{/market}">Market</a></li>
-                    <li class="nav-item"><a class="nav-link px-3 fw-semibold" th:href="@{/advisories}">Advisory</a></li>
-                    <li class="nav-item"><a class="nav-link px-3 fw-semibold" th:href="@{/weather}">Weather</a></li>
+                    <!-- Links for Logged-in Users -->
+                    <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link px-3 fw-semibold" th:href="@{/dashboard}">Dashboard</a></li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link px-3 fw-semibold" th:href="@{/market}">Market</a></li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link px-3 fw-semibold" th:href="@{/advisories}">Advisory</a></li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link px-3 fw-semibold" th:href="@{/weather}">Weather</a></li>
+                    
+                    <!-- Links for Guests -->
+                    <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link px-3 fw-semibold" th:href="@{/login}">Login</a></li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="btn btn-outline-success rounded-pill px-4 fw-bold ms-lg-2" th:href="@{/signup}">Sign Up</a></li>
+
+                    <!-- User Account Dropdown -->
                     <li class="nav-item ms-lg-3" sec:authorize="isAuthenticated()">
                         <div class="dropdown">
                             <button class="btn btn-success rounded-pill px-4 fw-bold shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">

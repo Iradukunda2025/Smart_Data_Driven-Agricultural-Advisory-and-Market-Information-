@@ -11,9 +11,15 @@ public class Notification {
     
     private String title;
     private String message;
+    @Column(name = "sender_role")
     private String senderRole; // ADMIN, VENDOR, SYSTEM
+
     private String type; // ADVISORY, MARKET_UPDATE, WEATHER_ALERT
     private LocalDateTime timestamp;
+
+    @Column(name = "is_read")
+    private boolean isRead = false;
+
     public Notification() {}
 
     public Notification(String title, String message, String senderRole, String type) {
@@ -22,6 +28,7 @@ public class Notification {
         this.senderRole = senderRole;
         this.type = type;
         this.timestamp = LocalDateTime.now();
+        this.isRead = false;
     }
 
     // Getters and Setters
@@ -37,4 +44,6 @@ public class Notification {
     public void setType(String type) { this.type = type; }
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+    public boolean isRead() { return isRead; }
+    public void setRead(boolean read) { isRead = read; }
 }

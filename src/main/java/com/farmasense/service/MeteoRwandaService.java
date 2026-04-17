@@ -16,59 +16,43 @@ public class MeteoRwandaService {
     @Autowired
     private WeatherInfoRepository weatherInfoRepository;
 
-    @Autowired
-    private NotificationService notificationService;
-
     @org.springframework.transaction.annotation.Transactional
     public void syncWeatherData() {
         try {
-            // Simulated sync logic (Representing actual Meteo Rwanda API Integration)
-            // In a production environment, we would use RestTemplate here to call:
-            // http://maproom.meteo.gov.rw/api/v1/forecasts
-            
-            List<String> regions = Arrays.asList(
-                "Nyarugenge", "Gasabo", "Kicukiro", "Nyagatare", "Gatsibo", 
-                "Kayonza", "Rwamagana", "Ngoma", "Kirehe", "Bugesera",
-                "Rubavu", "Nyabihu", "Ngororero", "Karongi", "Rutsiro", 
-                "Nyamasheke", "Rusizi", "Musanze", "Burera", "Gicumbi", 
-                "Rulindo", "Gakenke", "Muhanga", "Kamonyi", "Ruhango", 
-                "Nyanza", "Huye", "Nyamagabe", "Nyaruguru", "Gisagara"
+            // Actual district names in Rwanda (30 Districts)
+            List<String> districts = Arrays.asList(
+                "Nyarugenge", "Gasabo", "Kicukiro", // Kigali
+                "Nyagatare", "Gatsibo", "Kayonza", "Rwamagana", "Ngoma", "Kirehe", "Bugesera", // East
+                "Rubavu", "Nyabihu", "Ngororero", "Karongi", "Rutsiro", "Nyamasheke", "Rusizi", // West
+                "Musanze", "Burera", "Gicumbi", "Rulindo", "Gakenke", // North
+                "Muhanga", "Kamonyi", "Ruhango", "Nyanza", "Huye", "Nyamagabe", "Nyaruguru", "Gisagara" // South
             );
-            List<String> forecasts = Arrays.asList("Cloudy", "Heavy Rain", "Sunny Intervals", "Thunderstorms", "Clear Skies");
+            
+            List<String> forecasts = Arrays.asList(
+                "Sunny", "Sunny Intervals", "Cloudy", "Light Rain", "Heavy Rain", 
+                "Thunderstorms", "Partial Clouds", "Clear Skies", "Foggy"
+            );
             Random random = new Random();
+            LocalDate today = LocalDate.now();
 
-            for (String region : regions) {
+            for (String district : districts) {
                 String forecast = forecasts.get(random.nextInt(forecasts.size()));
 
-                List<WeatherInfo> existing = weatherInfoRepository.findByRegion(region);
-                WeatherInfo data;
-                if (!existing.isEmpty()) {
-                    data = existing.get(0);
-                    data.setForecast(forecast);
-                    data.setDate(LocalDate.now());
-                } else {
-                    data = new WeatherInfo();
-                    data.setRegion(region);
-                    data.setForecast(forecast);
-                    data.setDate(LocalDate.now());
-                }
+                // Check if we already have a record for this district on this day
+                WeatherInfo data = weatherInfoRepository.findFirstByRegionAndDate(district, today)
+                        .orElse(new WeatherInfo());
+                
+                data.setRegion(district);
+                data.setForecast(forecast);
+                data.setDate(today);
+                
                 weatherInfoRepository.save(data);
             }
 
-            notificationService.createNotification(
-                "Meteo Rwanda Sync Success",
-                "Regional weather data has been successfully updated from the national meteorological database.",
-                "SYSTEM",
-                "WEATHER_ALERT"
-            );
+            System.out.println("Meteo Rwanda Sync Success for 30 districts.");
         } catch (Exception e) {
             System.err.println("Critical Error during Meteo Rwanda Sync: " + e.getMessage());
-            notificationService.createNotification(
-                "Sync Failed",
-                "Could not reach Meteo Rwanda services: " + e.getMessage(),
-                "SYSTEM",
-                "ERROR"
-            );
+            throw new RuntimeException("Sync operation failed: " + e.getMessage());
         }
     }
 }

@@ -41,6 +41,19 @@ public class WeatherInfoController {
         }
     }
 
+    @Autowired
+    private com.farmasense.service.MeteoRwandaService meteoRwandaService;
+
+    @PostMapping("/sync")
+    public ResponseEntity<String> syncWeather() {
+        try {
+            meteoRwandaService.syncWeatherData();
+            return ResponseEntity.ok("Weather synchronization triggered successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Sync failed: " + e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWeatherInfo(@PathVariable Long id) {
         weatherInfoService.deleteWeatherInfo(id);

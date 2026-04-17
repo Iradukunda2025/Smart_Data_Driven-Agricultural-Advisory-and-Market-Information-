@@ -22,7 +22,10 @@ public class WebController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(org.springframework.security.core.Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/dashboard";
+        }
         return "login";
     }
 
@@ -163,12 +166,35 @@ public class WebController {
     }
 
     @GetMapping("/weather")
-    public String manageWeather(org.springframework.ui.Model model) {
-        model.addAttribute("weatherData", weatherInfoRepository != null ? weatherInfoRepository.findAll() : java.util.Collections.emptyList());
-        model.addAttribute("weatherRecords", weatherInfoRepository != null ? weatherInfoRepository.findAll() : java.util.Collections.emptyList());
+    public String manageWeather(@RequestParam(required = false) String search, 
+                                @RequestParam(required = false) String date,
+                                org.springframework.ui.Model model) {
+        java.util.List<com.farmasense.model.WeatherInfo> weatherRecords;
+        
+        try {
+            if (search != null && !search.isEmpty() && date != null && !date.isEmpty()) {
+                weatherRecords = weatherInfoRepository.findByRegionContainingIgnoreCaseAndDate(search, java.time.LocalDate.parse(date));
+            } else if (search != null && !search.isEmpty()) {
+                weatherRecords = weatherInfoRepository.findByRegionContainingIgnoreCase(search);
+            } else if (date != null && !date.isEmpty()) {
+                weatherRecords = weatherInfoRepository.findByDate(java.time.LocalDate.parse(date));
+            } else {
+                weatherRecords = weatherInfoRepository.findAll();
+            }
+        } catch (Exception e) {
+            weatherRecords = weatherInfoRepository.findAll();
+        }
+
+        model.addAttribute("weatherRecords", weatherRecords);
+        model.addAttribute("weatherData", weatherRecords); // Keep both for safety
+        model.addAttribute("search", search);
+        model.addAttribute("date", date);
+        
+        // Stabilizers for fragments
         model.addAttribute("marketPrices", java.util.Collections.emptyList());
         model.addAttribute("advisories", java.util.Collections.emptyList());
         model.addAttribute("notifications", java.util.Collections.emptyList());
+        
         return "weather";
     }
 
@@ -193,21 +219,22 @@ public class WebController {
     public String syncWeather(java.security.Principal principal) {
         try {
             meteoRwandaService.syncWeatherData();
-            String updater = (principal != null) ? principal.getName() : "Administrator";
-            notificationService.createNotification("Weather Updated", "New weather data has been synchronized by " + updater, "ADMIN", "WEATHER");
-            return "redirect:/dashboard/admin?synced";
+            return "redirect:/weather?synced";
         } catch (Exception e) {
             String rawMsg = e.getMessage() != null ? e.getMessage() : "Sync failed";
             String encodedMsg = "error";
             try {
                 encodedMsg = java.net.URLEncoder.encode(rawMsg, "UTF-8");
             } catch (Exception ex) {}
-            return "redirect:/dashboard/admin?error=" + encodedMsg;
+            return "redirect:/weather?error=" + encodedMsg;
         }
     }
 
     @GetMapping("/signup")
-    public String signup() {
+    public String signup(org.springframework.security.core.Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/dashboard";
+        }
         return "signup";
     }
 
@@ -285,13 +312,23 @@ public class WebController {
             weather.setForecast(forecast);
             weather.setDate(java.time.LocalDate.parse(date));
             weatherInfoRepository.save(weather);
-            
-            String updater = (principal != null) ? principal.getName() : "Forecaster";
-            notificationService.createNotification("Weather Info Updated", "Weather forecast for " + region + " has been updated by " + updater, "ADMIN", "WEATHER");
-            
             return "redirect:/weather?success";
         } catch (Exception e) {
             return "redirect:/weather?error=" + (e.getMessage() != null ? e.getMessage() : "Unknown error");
+        }
+    }
+
+    @PostMapping("/admin/weather/update")
+    public String updateWeather(@RequestParam Long id, @RequestParam String region, @RequestParam String forecast, @RequestParam String date) {
+        try {
+            com.farmasense.model.WeatherInfo weather = weatherInfoRepository.findById(id).orElseThrow();
+            weather.setRegion(region);
+            weather.setForecast(forecast);
+            weather.setDate(java.time.LocalDate.parse(date));
+            weatherInfoRepository.save(weather);
+            return "redirect:/weather?updated";
+        } catch (Exception e) {
+            return "redirect:/weather?error=" + (e.getMessage() != null ? e.getMessage() : "Update failed");
         }
     }
 
@@ -320,11 +357,6 @@ public class WebController {
                 marketPrice.setDate(java.time.LocalDate.now());
             }
             marketPriceRepository.save(marketPrice);
-            
-            String updater = (principal != null) ? principal.getName() : "Vendor";
-            if (notificationService != null) {
-                notificationService.createNotification("Market Price Updated", "The price for " + crop + " has been updated to " + price + " RWF by " + updater, "VENDOR", "MARKET");
-            }
             return "redirect:/market?success";
         } catch (Exception e) {
             return "redirect:/market?error";
