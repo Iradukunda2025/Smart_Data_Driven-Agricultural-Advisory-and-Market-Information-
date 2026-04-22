@@ -2,43 +2,44 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-    <footer th:fragment="footer" class="bg-dark text-white py-5 mt-auto"
-        style="background: linear-gradient(135deg, #131720 0%, #000000 100%); border-top: 4px solid #198754;">
+    <footer th:fragment="footer" class="bg-dark text-white py-5 mt-auto">
         <div class="container text-center">
             <div class="mb-4 d-flex justify-content-center align-items-center gap-3">
-                <div class="bg-white rounded-circle p-2 shadow-sm"
-                    style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-leaf text-success fa-lg"></i>
+                <div class="bg-success rounded-circle p-2 shadow-sm"
+                    style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-leaf text-white small"></i>
                 </div>
                 <div class="text-start">
-                    <h5 class="fw-bold mb-0 text-white" style="letter-spacing: 1px;">RP <span
-                            class="text-success">KARONGI</span> COLLEGE</h5>
-                    <small class="text-secondary text-uppercase fw-semibold" style="font-size: 0.65rem;">Technology for
-                        Sustainable Agriculture</small>
+                    <h5 class="fw-bold mb-0 text-white">RP <span class="text-success">KARONGI</span> COLLEGE</h5>
+                    <small class="text-muted text-uppercase fw-semibold" style="font-size: 0.65rem;">Precision Systems
+                        for Sustainable Agriculture</small>
                 </div>
             </div>
 
-            <p class="text-secondary small mb-4 opacity-75">Smart Data-Driven Agricultural Advisory and Market
+            <p class="text-muted small text-uppercase mb-4">Smart Data-Driven Agricultural Advisory and Market
                 Information System</p>
 
             <div
-                class="bg-white bg-opacity-5 p-3 rounded-pill d-inline-block border border-white border-opacity-10 mb-4 shadow-sm px-5">
-                <p class="text-white fw-bold small mb-0">
-                    <i class="fas fa-user-graduate me-2 text-success"></i>
-                    System Developer: <span class="text-uppercase">IRADUKUNDA Jean De Dieu</span>
+                class="bg-white bg-opacity-5 p-3 rounded-4 d-inline-block border border-white border-opacity-10 mb-4 px-5">
+                <p class="text-white small mb-0">
+                    <i class="fas fa-code me-2 text-success"></i>
+                    Developer: <span class="fw-bold">IRADUKUNDA Jean de Dieu</span>
                     <span class="mx-3 opacity-25">|</span>
-                    Student ID: <span class="text-success">24RP04674</span>
+                    Registration No: <span class="text-success fw-bold">24RP04674</span>
                 </p>
             </div>
 
             <div class="mt-2">
                 <span
-                    class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10 px-4 py-2 rounded-pill small">
-                    <i class="fas fa-check-circle me-1"></i>System Operational
+                    class="badge border border-success border-opacity-50 text-success bg-transparent px-4 py-2 rounded-pill small">
+                    <i class="fas fa-check-circle me-1"></i>SYSTEM OPERATIONAL
                 </span>
             </div>
+            <p class="text-muted x-small mt-4 mb-0">&copy; 2026 FarmaSense Platform. All rights reserved.</p>
         </div>
     </footer>
+
+
 </body>
 
 </html>

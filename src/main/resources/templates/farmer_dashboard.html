@@ -1,80 +1,104 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <title>Farmer Dashboard - FarmaSense</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .farmer-banner {
+            background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
+            border-radius: 25px;
+            padding: 40px;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(45, 106, 79, 0.15);
+        }
+
+        .dashboard-card {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+            background: white;
+        }
+
+        .icon-box-green {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background-color: #f0fdf4;
+            color: #198754;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
+
 <body class="bg-light d-flex flex-column min-vh-100">
     <div th:replace="fragments/header :: header"></div>
 
-    <div class="container mt-4 flex-grow-1 mb-5">
+    <div class="container mt-5 flex-grow-1 mb-5">
+        <div class="farmer-banner text-center text-md-start">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="fw-bold mb-2">Farmer Intelligence Nexus</h1>
+                    <p class="lead opacity-75">Access localized weather telemetry, market trends, and expert
+                        agricultural guidance.</p>
+                </div>
+                <div class="col-md-4 text-md-end text-center mt-4 mt-md-0">
+                    <div
+                        class="p-3 bg-white bg-opacity-10 rounded-4 border border-white border-opacity-25 d-inline-block">
+                        <small class="d-block opacity-75">OPERATOR ID</small>
+                        <h5 class="fw-bold mb-0">IRADUKUNDA J.D.D</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row g-4">
-            <!-- Welcome Header -->
-            <div class="col-12">
-                <div class="card border-0 shadow-sm rounded-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #198754 0%, #0d6efd 100%);">
-                    <div class="card-body p-5 text-white">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h1 class="fw-bold mb-2">Welcome to your Farmer Portal</h1>
-                                <p class="lead opacity-75 mb-4">Empowering your farm with real-time data and expert advice.</p>
-                                <div class="d-flex flex-wrap gap-2">
-                                    <span class="badge bg-white bg-opacity-25 rounded-pill px-3 py-2"><i class="fas fa-seedling me-2"></i>Smart Advisory</span>
-                                    <span class="badge bg-white bg-opacity-25 rounded-pill px-3 py-2"><i class="fas fa-cloud-rain me-2"></i>Weather Alerts</span>
-                                    <span class="badge bg-white bg-opacity-25 rounded-pill px-3 py-2"><i class="fas fa-magnifying-glass-chart me-2"></i>Live Markets</span>
-                                </div>
-                            </div>
-                            <div class="col-md-4 text-end d-none d-md-block">
-                                <div class="p-3 bg-white bg-opacity-10 rounded-4 border border-white border-opacity-25">
-                                    <small class="d-block opacity-75">Student Project by</small>
-                                    <h5 class="fw-bold mb-0">IRADUKUNDA J.D.D</h5>
-                                    <small class="opacity-75">Reg No: 24RP04674</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Weather Card -->
+            <!-- Weather Insights -->
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
-                    <div class="card-header bg-warning py-3 text-center border-0">
-                        <h6 class="fw-bold mb-0"><i class="fas fa-sun-cloud me-2"></i>Local Weather Outlook</h6>
+                <div class="dashboard-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h6 class="fw-bold mb-0"><i class="fas fa-cloud-sun me-2 text-success"></i>Weather Intel</h6>
+                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">Live Feed</span>
                     </div>
-                    <div class="card-body text-center p-4">
-                        <div th:each="w : ${#lists.size(weatherRecords) > 0 ? weatherRecords.subList(0, 1) : weatherRecords}">
-                            <div class="display-3 fw-bold text-dark mb-0" th:text="${w.forecast.contains('°C') ? w.forecast : '24°C'}">24°C</div>
-                            <h5 class="fw-bold text-muted mb-3" th:text="${w.region}">Region</h5>
-                            <p class="small text-secondary mb-0" th:text="${w.forecast}">Clear skies with moderate winds.</p>
-                        </div>
-                        <div th:if="${#lists.isEmpty(weatherRecords)}" class="py-4">
-                            <i class="fas fa-cloud-moon fa-3x text-light mb-3"></i>
-                            <p class="text-muted">Weather data syncing...</p>
-                        </div>
+                    <div th:each="w : ${#lists.size(weatherRecords) > 0 ? weatherRecords.subList(0, 1) : weatherRecords}"
+                        class="text-center">
+                        <div class="display-3 fw-bold text-success mb-2"
+                            th:text="${w.forecast.contains('°C') ? w.forecast : '24°C'}">24°C</div>
+                        <h5 class="fw-bold mb-1" th:text="${w.region}">Region</h5>
+                        <p class="text-muted small" th:text="${w.forecast}">Synchronizing...</p>
+                    </div>
+                    <div th:if="${#lists.isEmpty(weatherRecords)}" class="text-center py-4">
+                        <i class="fas fa-satellite-dish fa-3x text-muted opacity-25 mb-3"></i>
+                        <p class="text-muted small">Awaiting telemetry nodes...</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Advisory Feed -->
+            <!-- Recent Advisories -->
             <div class="col-md-8">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-white border-0 py-3">
-                        <h6 class="fw-bold mb-0 text-success"><i class="fas fa-graduation-cap me-2"></i>New Farming Advisories</h6>
+                <div class="dashboard-card h-100 overflow-hidden">
+                    <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold mb-0"><i class="fas fa-book-sparkles me-2 text-success"></i>Expert Guidance
+                        </h6>
+                        <a th:href="@{/advisories}"
+                            class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold">View All</a>
                     </div>
-                    <div class="list-group list-group-flush border-top">
-                        <div th:each="adv : ${advisories}" class="list-group-item bg-transparent p-4 border-0 border-bottom">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="fw-bold mb-1" th:text="${adv.title}">Advisory Title</h5>
-                                <span class="badge bg-light text-success border" th:text="${adv.date}">Today</span>
+                    <div class="list-group list-group-flush">
+                        <div th:each="adv : ${advisories}" class="list-group-item p-4 border-0 border-bottom">
+                            <div class="d-flex justify-content-between mb-2">
+                                <h6 class="fw-bold text-dark mb-0 text-success" th:text="${adv.title}">Pest Management
+                                </h6>
+                                <small class="text-muted" th:text="${adv.date}">22 Apr 2026</small>
                             </div>
-                            <p class="text-secondary mb-3" th:text="${adv.description}">Advisory description goes here.</p>
-                            <button class="btn btn-sm btn-outline-success rounded-pill px-3">Read Full Guide</button>
+                            <p class="text-muted small mb-0" th:text="${adv.description}">Description...</p>
                         </div>
-                        <div th:if="${#lists.isEmpty(advisories)}" class="p-5 text-center text-muted">
-                            <i class="fas fa-book-open fa-3x mb-3 opacity-25"></i>
-                            <p>No new advisories today. Keep checking!</p>
+                        <div th:if="${#lists.isEmpty(advisories)}" class="text-center py-5">
+                            <p class="text-muted">No new advisories available.</p>
                         </div>
                     </div>
                 </div>
@@ -82,31 +106,35 @@
 
             <!-- Market Watch -->
             <div class="col-12">
-                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3">
-                        <h6 class="fw-bold mb-0"><i class="fas fa-chart-line me-2 text-primary"></i>Live Marketplace Overview</h6>
+                <div class="dashboard-card overflow-hidden">
+                    <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold mb-0"><i class="fas fa-chart-line me-2 text-success"></i>Marketplace
+                            Telemetry</h6>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="ps-4">Commodity</th>
-                                    <th>Recent Price</th>
-                                    <th>Trend</th>
-                                    <th class="text-end pe-4">Action</th>
+                            <thead class="bg-light">
+                                <tr class="small fw-bold text-muted">
+                                    <th class="ps-4 py-3">COMMODITY</th>
+                                    <th>CURRENT PRICE</th>
+                                    <th>LAST UPDATED</th>
+                                    <th class="text-end pe-4">ACTIONS</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="p : ${marketPrices}">
-                                    <td class="ps-4 fw-bold" th:text="${p.crop}">Potato</td>
-                                    <td><span class="text-success fw-bold" th:text="${p.price + ' RWF'}">500 RWF</span> <small class="text-muted">/kg</small></td>
-                                    <td><span class="badge bg-success bg-opacity-10 text-success rounded-pill"><i class="fas fa-arrow-up me-1"></i>Stable</span></td>
+                                    <td class="ps-4"><span class="fw-bold text-success"
+                                            th:text="${p.crop}">Potato</span></td>
+                                    <td><span class="fw-bold">[[${p.price}]] RWF</span> <small class="text-muted">/
+                                            kg</small></td>
+                                    <td class="text-muted small" th:text="${p.date}">Today</td>
                                     <td class="text-end pe-4">
-                                        <a href="/market" class="btn btn-sm btn-light border rounded-pill px-3 shadow-sm">Details</a>
+                                        <a href="/market" class="btn btn-sm btn-light rounded-pill px-3">Details</a>
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(marketPrices)}">
-                                    <td colspan="4" class="text-center py-5 text-muted small border-top">No marketplace data available.</td>
+                                    <td colspan="4" class="text-center py-4 text-muted">Awaiting market reports from
+                                        nodes.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -117,7 +145,7 @@
     </div>
 
     <div th:replace="fragments/footer :: footer"></div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

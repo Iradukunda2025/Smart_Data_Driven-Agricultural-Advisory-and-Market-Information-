@@ -1,12 +1,75 @@
+:root {
+    /* Main Professional Green Palette */
+    --fs-primary: #2d6a4f;
+    --fs-primary-dark: #1b4332;
+    --fs-secondary: #475569;
+    --fs-accent: #fbbf24;
+    /* Yellow for specific sync actions */
+    --fs-light: #f8fafc;
+    --fs-white: #ffffff;
+    --fs-gray: #94a3b8;
+    --fs-success: #198754;
+    --fs-bg-soft: #f0fdf4;
+}
+
 /* Global Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Outfit', 'Segoe UI', sans-serif;
+    color: #334155;
+    background-color: var(--fs-light);
 }
 
 /* Navbar Customization */
 .navbar {
-    background: linear-gradient(135deg, #198754, #146c43) !important;
+    background: white !important;
+    padding: 0.8rem 0;
+    border-bottom: 2px solid #e2e8f0;
 }
+
+.text-gradient-green {
+    background: linear-gradient(135deg, var(--fs-primary) 0%, var(--fs-success) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-primary-green {
+    background: var(--fs-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-primary-green:hover {
+    background: var(--fs-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(45, 106, 79, 0.2);
+    color: white;
+}
+
+.btn-outline-green {
+    background: white;
+    color: var(--fs-primary);
+    border: 2px solid var(--fs-primary);
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-outline-green:hover {
+    background: var(--fs-bg-soft);
+    color: var(--fs-primary-dark);
+}
+
+.green-bg-soft {
+    background-color: var(--fs-bg-soft);
+}
+
+
 
 /* Hero Section Animations */
 .fade-in-up {

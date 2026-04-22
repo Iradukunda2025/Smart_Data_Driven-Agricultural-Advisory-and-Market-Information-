@@ -1,225 +1,125 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vendor Intelligence Center - FarmaSense</title>
+    <title>Market Officer Center - FarmaSense</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <style>
-        :root {
-            --fs-green: #198754;
-            --fs-dark: #121826;
-            --fs-glass: rgba(255, 255, 255, 0.95);
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #f4f7f6;
-            color: #2d3436;
-        }
-
-        /* Hero Styling */
-        .premium-hero {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/Local-Markets-in-Rwanda.jpg');
-            background-size: cover;
-            background-position: center;
-            height: 380px;
+        .vendor-hero {
+            background: linear-gradient(rgba(27, 67, 50, 0.7), rgba(27, 67, 50, 0.9)), url('/Local-Markets-in-Rwanda.jpg') center/cover;
+            height: 300px;
             display: flex;
             align-items: center;
-            border-radius: 0 0 60px 60px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border-radius: 0 0 50px 50px;
             color: white;
-            margin-bottom: -60px;
+            margin-bottom: 50px;
         }
 
-        .glass-stats {
-            background: var(--fs-glass);
-            backdrop-filter: blur(10px);
+        .dashboard-card {
             border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: 0.3s;
-            border: 1px solid rgba(25, 135, 84, 0.1);
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            background: white;
         }
 
-        .glass-stats:hover { transform: translateY(-5px); }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            background: rgba(25, 135, 84, 0.1);
-            color: var(--fs-green);
+        .stat-badge {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background-color: #f0fdf4;
+            color: #198754;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-        }
-
-        /* Modern Table */
-        .table-container {
-            background: white;
-            border-radius: 30px;
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.03);
-        }
-
-        .custom-table thead th {
-            background: transparent;
-            color: #636e72;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            border-bottom: 2px solid #f1f2f6;
-            padding-bottom: 15px;
-        }
-
-        .custom-table tbody tr {
-            transition: 0.2s;
-        }
-
-        .custom-table tbody td {
-            padding: 20px 15px;
-            vertical-align: middle;
-            border-bottom: 1px solid #f1f2f6;
-        }
-
-        /* Sidebar Widgets */
-        .widget {
-            background: white;
-            border-radius: 24px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-        }
-
-        .btn-modern {
-            border-radius: 14px;
-            padding: 12px 25px;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .btn-success { background: var(--fs-green); border: none; }
-        .btn-success:hover { background: #146c43; transform: scale(1.02); }
-
-        .image-overlay-card {
-            border-radius: 25px;
-            overflow: hidden;
-            position: relative;
-            height: 180px;
-            background: url('/biotechnology-revolutionizes-precision-farming-with-smart-data-driven-solutions-sustainable-agriculture_994764-163908.jpg') center/cover;
-        }
-
-        .overlay-text {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            padding: 20px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.9));
-            color: white;
         }
     </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
 
+<body class="bg-light d-flex flex-column min-vh-100">
     <div th:replace="fragments/header :: header"></div>
 
-    <!-- Premium Hero Section -->
-    <header class="premium-hero">
-        <div class="container text-center text-md-start">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <span class="badge bg-success bg-opacity-75 mb-3 px-3 py-2 rounded-pill shadow">
-                        <i class="fas fa-certificate me-2"></i>Official Market Officer Portal
-                    </span>
-                    <h1 class="display-3 fw-bold mb-3">Market Intelligence Hub</h1>
-                    <p class="lead opacity-90 mb-0">Managing real-time crop pricing and agricultural commodity data for Rwandan farmers.</p>
-                </div>
-            </div>
+    <header class="vendor-hero">
+        <div class="container">
+            <span class="badge bg-white bg-opacity-20 rounded-pill px-3 py-2 small mb-3"><i
+                    class="fas fa-certificate me-2"></i>Official Market Node Controller</span>
+            <h1 class="display-4 fw-bold mb-3">Market Intelligence Hub</h1>
+            <p class="lead opacity-75">Managing real-time commodity exchange rates and agricultural trade protocols.</p>
         </div>
     </header>
 
-    <div class="container mt-5 flex-grow-1">
+    <div class="container flex-grow-1 pb-5">
         <!-- Stats Summary -->
         <div class="row g-4 mb-5">
             <div class="col-md-4">
-                <div class="glass-stats">
-                    <div class="stat-icon"><i class="fas fa-seedling"></i></div>
-                    <h3 class="fw-bold mb-1" th:text="${marketPrices != null ? marketPrices.size() : '0'}">24</h3>
-                    <p class="text-muted small mb-0">Market Items Tracked</p>
+                <div class="dashboard-card p-4">
+                    <div class="stat-badge mb-3"><i class="fas fa-box-open"></i></div>
+                    <h3 class="fw-bold mb-1" th:text="${marketPrices != null ? marketPrices.size() : '3'}">3</h3>
+                    <p class="text-muted small fw-bold text-uppercase mb-0">Tracked Commodities</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="glass-stats">
-                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="dashboard-card p-4">
+                    <div class="stat-badge mb-3"><i class="fas fa-sync"></i></div>
                     <h3 class="fw-bold mb-1">99.8%</h3>
-                    <p class="text-muted small mb-0">Data Accuracy Sync</p>
+                    <p class="text-muted small fw-bold text-uppercase mb-0">Sync Consistency</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="glass-stats">
-                    <div class="stat-icon"><i class="fas fa-user-circle"></i></div>
+                <div class="dashboard-card p-4">
+                    <div class="stat-badge mb-3"><i class="fas fa-user-check"></i></div>
                     <h3 class="fw-bold mb-1" sec:authentication="name">Officer</h3>
-                    <p class="text-muted small mb-0">Current Session User</p>
+                    <p class="text-muted small fw-bold text-uppercase mb-0">Active Controller</p>
                 </div>
             </div>
         </div>
 
         <div class="row g-4">
-            <!-- Market CRUD Area -->
             <div class="col-lg-8">
-                <div class="table-container mb-5">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4 class="fw-bold mb-0">Crop Price Inventory</h4>
-                        <button class="btn btn-success btn-modern shadow-sm" data-bs-toggle="modal" data-bs-target="#addPriceModal">
-                            <i class="fas fa-plus-circle me-2"></i>New Price Entry
+                <div class="dashboard-card overflow-hidden">
+                    <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">Crop Price Registry</h5>
+                        <button class="btn btn-success fw-bold px-4 rounded-3" data-bs-toggle="modal"
+                            data-bs-target="#addPriceModal">
+                            <i class="fas fa-plus me-2"></i>New Entry
                         </button>
                     </div>
-
                     <div class="table-responsive">
-                        <table class="table custom-table">
-                            <thead>
-                                <tr>
-                                    <th>Commodity</th>
-                                    <th>Price (RWF)</th>
-                                    <th>Last Updated</th>
-                                    <th class="text-end">Actions</th>
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr class="small fw-bold text-muted">
+                                    <th class="ps-4 py-3">COMMODITY</th>
+                                    <th>CURRENT PRICE</th>
+                                    <th>TIMESTAMP</th>
+                                    <th class="text-end pe-4">PROTOCOLS</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="p : ${marketPrices}">
-                                    <td>
+                                    <td class="ps-4">
                                         <div class="fw-bold text-success" th:text="${p.crop}">Maize</div>
-                                        <small class="text-muted">Grain Category</small>
+                                        <div class="text-muted x-small">Grain Category</div>
                                     </td>
-                                    <td>
-                                        <div class="fw-bold" th:text="${p.price != null ? p.price + ' RWF / kg' : 'N/A'}">800 RWF</div>
-                                    </td>
-                                    <td class="text-muted small" th:text="${p.date}">2026-04-12</td>
-                                    <td class="text-end">
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <button class="btn btn-light btn-sm rounded-3 text-warning shadow-sm" 
-                                                    th:data-id="${p.id}" th:data-crop="${p.crop}" th:data-price="${p.price}" th:data-date="${p.date}"
-                                                    onclick="editRecord(this)">
-                                                <i class="fas fa-edit"></i>
+                                    <td><span class="fw-bold">[[${p.price}]] RWF</span> <small class="text-muted">/
+                                            kg</small></td>
+                                    <td class="text-muted small" th:text="${p.date}">Today</td>
+                                    <td class="text-end pe-4">
+                                        <button class="btn btn-sm btn-light text-warning" th:data-id="${p.id}"
+                                            th:data-crop="${p.crop}" th:data-price="${p.price}" th:data-date="${p.date}"
+                                            onclick="editRecord(this)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <form th:action="@{/admin/market/delete}" method="post" class="d-inline ms-1">
+                                            <input type="hidden" name="id" th:value="${p.id}">
+                                            <button type="submit" class="btn btn-sm btn-light text-danger"
+                                                onclick="return confirm('Purge this market record?')">
+                                                <i class="fas fa-trash"></i>
                                             </button>
-                                            <form th:action="@{/admin/market/delete}" method="post" style="display:inline;">
-                                                <input type="hidden" name="id" th:value="${p.id}">
-                                                <button type="submit" class="btn btn-light btn-sm rounded-3 text-danger shadow-sm" onclick="return confirm('Delete this record?')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr th:if="${#lists.isEmpty(marketPrices)}">
-                                    <td colspan="4" class="text-center py-5">
-                                        <img src="/Local-Markets-in-Rwanda.jpg" style="width: 150px; opacity: 0.1; filter: grayscale(1);" class="mb-3">
-                                        <p class="text-muted">No market data segments found. Start by adding a new commodity price.</p>
+                                        </form>
                                     </td>
                                 </tr>
                             </tbody>
@@ -228,25 +128,13 @@
                 </div>
             </div>
 
-            <!-- Sidebar -->
             <div class="col-lg-4">
-                <div class="widget">
-                    <h5 class="fw-bold mb-3">Market Spotlight</h5>
-                    <div class="image-overlay-card shadow-sm mb-3">
-                        <div class="overlay-text">
-                            <h6 class="fw-bold mb-1">Precision Pricing</h6>
-                            <p class="x-small mb-0 opacity-75">Ensuring fair market trade across Rwanda.</p>
-                        </div>
-                    </div>
-                    <p class="small text-muted">As a Market Officer, your role is to bridge the information gap for local farmers by providing verified daily rates.</p>
-                </div>
-
-                <div class="widget bg-success text-white">
-                    <h5 class="fw-bold mb-3"><i class="fas fa-info-circle me-2"></i>Vendor Guidelines</h5>
-                    <ul class="list-unstyled small opacity-90 mb-0">
-                        <li class="mb-2"><i class="fas fa-check me-2"></i>Verify source prices daily.</li>
-                        <li class="mb-2"><i class="fas fa-check me-2"></i>Update and manage crop listings.</li>
-                        <li><i class="fas fa-check me-2"></i>Ensure accurate date entry.</li>
+                <div class="dashboard-card p-4 bg-success text-white">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-shield-halved me-2"></i>Officer Guidelines</h5>
+                    <ul class="small mb-0 opacity-90 ps-3">
+                        <li class="mb-3">Verify source prices daily with local nodes.</li>
+                        <li class="mb-3">Update crop listings by 9:00 AM CAT.</li>
+                        <li>Maintain data precision for advisory modules.</li>
                     </ul>
                 </div>
             </div>
@@ -254,39 +142,39 @@
     </div>
 
     <!-- Modals -->
-    <!-- Add Modal -->
     <div class="modal fade" id="addPriceModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content border-0 rounded-4 shadow">
                 <div class="modal-header bg-success text-white border-0 py-3">
-                    <h5 class="modal-title fw-bold">New Marketplace Record</h5>
+                    <h5 class="modal-title fw-bold">Initialize Market Entry</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <form th:action="@{/admin/market/add}" method="post">
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">COMMODITY NAME</label>
-                            <input type="text" name="crop" class="form-control" required placeholder="e.g. Arabica Coffee">
+                            <label class="form-label small fw-bold text-muted">CROP NAME</label>
+                            <input type="text" name="crop" class="form-control" required placeholder="e.g. Beans">
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">PRICE (RWF / KG)</label>
                             <input type="number" name="price" class="form-control" required placeholder="0.00">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">EFFECTIVE DATE</label>
-                            <input type="date" name="date" class="form-control" th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" required>
+                            <label class="form-label small fw-bold text-muted">DATE</label>
+                            <input type="date" name="date" class="form-control"
+                                th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" required>
                         </div>
                     </div>
-                    <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success rounded-3 px-4">Save Entry</button>
+                    <div class="modal-footer border-0 p-4 pt-0">
+                        <button type="button" class="btn btn-light rounded-3 px-4"
+                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success rounded-3 px-4">Publish Entry</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Edit Modal -->
     <div class="modal fade" id="editPriceModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content border-0 rounded-4 shadow">
@@ -298,11 +186,11 @@
                     <input type="hidden" name="id" id="edit-id">
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">COMMODITY</label>
+                            <label class="form-label small fw-bold text-muted">CROP NAME</label>
                             <input type="text" name="crop" id="edit-crop" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">PRICE (RWF / KG)</label>
+                            <label class="form-label small fw-bold text-muted">PRICE (RWF)</label>
                             <input type="number" name="price" id="edit-price" class="form-control" required>
                         </div>
                         <div class="mb-3">
@@ -310,9 +198,11 @@
                             <input type="date" name="date" id="edit-date" class="form-control" required>
                         </div>
                     </div>
-                    <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Abort</button>
-                        <button type="submit" class="btn btn-warning rounded-3 px-4">Update Record</button>
+                    <div class="modal-footer border-0 p-4 pt-0">
+                        <button type="button" class="btn btn-light rounded-3 px-4"
+                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning rounded-3 px-4 text-dark fw-bold">Update
+                            Record</button>
                     </div>
                 </form>
             </div>
@@ -320,7 +210,6 @@
     </div>
 
     <div th:replace="fragments/footer :: footer"></div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function editRecord(btn) {
@@ -332,4 +221,5 @@
         }
     </script>
 </body>
+
 </html>

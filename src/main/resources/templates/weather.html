@@ -1,110 +1,82 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <title>Manage Weather - FarmaSense</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-light d-flex flex-column min-vh-100">
     <div th:replace="fragments/header :: header"></div>
 
-    <div class="container mt-4 flex-grow-1">
-        <div class="card border-0 rounded-4 overflow-hidden mb-4 shadow-sm">
-            <div style="height: 200px; background: url('/reg-rwanda-weather.png') center/cover;"></div>
-            <div class="card-img-overlay d-flex align-items-end p-0">
-                <div class="w-100 p-4" style="background: linear-gradient(transparent, rgba(0,0,0,0.8));">
-                    <h2 class="fw-bold text-white mb-0">Weather Insights & Forecast</h2>
+    <div class="container mt-5 flex-grow-1">
+        <div class="card border-0 rounded-4 overflow-hidden mb-4 shadow-sm position-relative">
+            <div
+                style="height: 250px; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/reg-rwanda-weather.png') center/cover;">
+            </div>
+            <div class="card-img-overlay d-flex align-items-center ps-5">
+                <div>
+                    <h1 class="display-5 fw-bold text-white mb-0">Weather Insights & Forecast</h1>
                 </div>
             </div>
         </div>
 
         <!-- Feedback Alerts -->
-        <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
-            <i class="fas fa-check-circle me-2"></i> Weather entry added successfully!
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        <div th:if="${param.updated}" class="alert alert-primary alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
-            <i class="fas fa-info-circle me-2"></i> Weather entry updated successfully!
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        <div th:if="${param.deleted}" class="alert alert-warning alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
-            <i class="fas fa-exclamation-triangle me-2"></i> Weather entry deleted.
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        <div th:if="${param.synced}" class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
-            <i class="fas fa-sync me-2"></i> Weather data synchronized with Meteo Rwanda!
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
-            <i class="fas fa-times-circle me-2"></i> Error: <span th:text="${param.error}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div th:if="${param.success}" class="alert alert-success border-0 rounded-3 shadow-sm mb-4">
+            <i class="fas fa-check-circle me-2"></i> Weather sync completed.
         </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="flex-grow-1 me-3">
-                <form th:action="@{/weather}" method="get" class="d-flex flex-wrap gap-2">
-                    <div class="input-group shadow-sm" style="max-width: 300px;">
-                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" name="search" class="form-control border-start-0" placeholder="Search district..." th:value="${search}">
-                    </div>
-                    <div class="input-group shadow-sm" style="max-width: 200px;">
-                        <input type="date" name="date" class="form-control" th:value="${date}">
-                    </div>
-                    <button type="submit" class="btn btn-primary shadow-sm px-4">
-                        <i class="fas fa-filter me-1"></i> Filter
-                    </button>
-                    <a th:if="${search != null or date != null}" th:href="@{/weather}" class="btn btn-outline-secondary shadow-sm">
-                        Clear
-                    </a>
-                </form>
-            </div>
-            <div class="d-flex" sec:authorize="hasRole('ADMIN')">
-                <form th:action="@{/admin/weather/sync}" method="post" class="me-2">
-                    <button type="submit" class="btn btn-outline-success shadow-sm">
-                        <i class="fas fa-sync-alt me-2"></i>Sync Meteo Rwanda
-                    </button>
-                </form>
-                <button class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#addWeatherModal">
-                    <i class="fas fa-plus me-2"></i>Add Manual Entry
+        <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
+            <form th:action="@{/admin/weather/sync}" method="post" sec:authorize="hasRole('ADMIN')">
+                <button type="submit" class="btn btn-outline-success fw-bold px-4 rounded-3">
+                    <i class="fas fa-sync-alt me-2"></i>Sync Meteo Rwanda
                 </button>
-            </div>
+            </form>
+            <button class="btn btn-success fw-bold px-4 rounded-3" data-bs-toggle="modal"
+                data-bs-target="#addWeatherModal" sec:authorize="hasRole('ADMIN')">
+                <i class="fas fa-plus me-2"></i>Add Manual Entry
+            </button>
         </div>
 
-        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
             <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-dark">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark text-white">
                         <tr>
-                            <th>Region</th>
-                            <th>Forecast</th>
-                            <th>Date</th>
-                            <th class="text-end" sec:authorize="hasRole('ADMIN')">Actions</th>
+                            <th class="ps-3 py-3">Region</th>
+                            <th class="py-3">Forecast</th>
+                            <th class="py-3">Date</th>
+                            <th class="text-center py-3" sec:authorize="hasRole('ADMIN')">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="weather : ${weatherData}">
-                            <td th:text="${weather.region}" class="fw-bold">Region</td>
-                            <td th:text="${weather.forecast}">Forecast</td>
+                            <td class="ps-3 fw-bold" th:text="${weather.region}">Region</td>
+                            <td class="text-muted" th:text="${weather.forecast}">Forecast</td>
                             <td th:text="${weather.date != null ? weather.date : 'N/A'}">Date</td>
-                            <td class="text-end" sec:authorize="hasRole('ADMIN')">
-                                <div class="d-flex justify-content-end">
-                                    <button class="btn btn-sm btn-outline-primary me-2" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#editWeatherModal"
-                                            th:attr="data-id=${weather.id}, data-region=${weather.region}, data-forecast=${weather.forecast}, data-date=${weather.date}">
+                            <td class="text-center" sec:authorize="hasRole('ADMIN')">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#editWeatherModal"
+                                        th:attr="data-id=${weather.id}, data-region=${weather.region}, data-forecast=${weather.forecast}, data-date=${weather.date}">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <form th:action="@{/admin/weather/delete}" method="post" onsubmit="return confirm('Delete this weather entry?')">
+                                    <form th:action="@{/admin/weather/delete}" method="post">
                                         <input type="hidden" name="id" th:value="${weather.id}">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Delete this weather entry?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(weatherData)}">
                             <td colspan="4" class="text-center py-5 text-muted">
-                                <i class="fas fa-cloud-sun me-1"></i> No weather info available.
+                                <i class="fas fa-cloud-sun fa-2x opacity-25 mb-3"></i>
+                                <p>No weather data identified in registry.</p>
                             </td>
                         </tr>
                     </tbody>
@@ -117,18 +89,18 @@
     <div class="modal fade" id="addWeatherModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content border-0 rounded-4 shadow">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title">Add Weather Info</h5>
+                <div class="modal-header bg-success text-white border-0 py-3">
+                    <h5 class="modal-title fw-bold">Add Manual Entry</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <form th:action="@{/admin/weather/add}" method="post">
-                    <div class="modal-body">
+                    <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label class="form-label">Region/Location</label>
+                            <label class="form-label small fw-bold text-muted">REGION / LOCATION</label>
                             <input type="text" name="region" class="form-control" required placeholder="e.g. Kigali">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Forecast</label>
+                            <label class="form-label small fw-bold text-muted">FORECAST</label>
                             <select name="forecast" class="form-select" required>
                                 <option value="Sunny">Sunny</option>
                                 <option value="Rainy">Rainy</option>
@@ -137,13 +109,14 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Date</label>
+                            <label class="form-label small fw-bold text-muted">DATE</label>
                             <input type="date" name="date" class="form-control" required>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success">Save Entry</button>
+                    <div class="modal-footer border-0 p-4 pt-0">
+                        <button type="button" class="btn btn-light rounded-3 px-4"
+                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success rounded-3 px-4">Save Entry</button>
                     </div>
                 </form>
             </div>
@@ -154,19 +127,19 @@
     <div class="modal fade" id="editWeatherModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content border-0 rounded-4 shadow">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Edit Weather Info</h5>
+                <div class="modal-header bg-primary text-white border-0 py-3">
+                    <h5 class="modal-title fw-bold">Edit Weather Info</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <form th:action="@{/admin/weather/update}" method="post">
                     <input type="hidden" name="id" id="edit-id">
-                    <div class="modal-body">
+                    <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label class="form-label">Region/Location</label>
+                            <label class="form-label small fw-bold text-muted">REGION / LOCATION</label>
                             <input type="text" name="region" id="edit-region" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Forecast</label>
+                            <label class="form-label small fw-bold text-muted">FORECAST</label>
                             <select name="forecast" id="edit-forecast" class="form-select" required>
                                 <option value="Sunny">Sunny</option>
                                 <option value="Rainy">Rainy</option>
@@ -177,13 +150,14 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Date</label>
+                            <label class="form-label small fw-bold text-muted">DATE</label>
                             <input type="date" name="date" id="edit-date" class="form-control" required>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update Entry</button>
+                    <div class="modal-footer border-0 p-4 pt-0">
+                        <button type="button" class="btn btn-light rounded-3 px-4"
+                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary rounded-3 px-4">Apply Changes</button>
                     </div>
                 </form>
             </div>
@@ -193,10 +167,10 @@
     <div th:replace="fragments/footer :: footer"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const editModal = document.getElementById('editWeatherModal');
             if (editModal) {
-                editModal.addEventListener('show.bs.modal', function(event) {
+                editModal.addEventListener('show.bs.modal', function (event) {
                     const button = event.relatedTarget;
                     const id = button.getAttribute('data-id');
                     const region = button.getAttribute('data-region');
@@ -212,4 +186,5 @@
         });
     </script>
 </body>
+
 </html>

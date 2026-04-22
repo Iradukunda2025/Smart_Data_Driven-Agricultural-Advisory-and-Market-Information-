@@ -1,37 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <body>
-    <header th:fragment="header" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3" style="border-bottom: 2px solid #198754; background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px);">
+    <header th:fragment="header" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center fw-bold" th:href="${#authorization.expression('isAuthenticated()') ? '/dashboard' : '/'}" style="font-size: 1.4rem; letter-spacing: -0.5px;">
-                <div class="bg-success rounded-3 p-2 me-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+            <a class="navbar-brand d-flex align-items-center fw-bold"
+                th:href="${#authorization.expression('isAuthenticated()') ? '/dashboard' : '/'}"
+                style="font-size: 1.4rem; letter-spacing: -0.5px;">
+                <div class="bg-success rounded-3 p-2 me-2 shadow-sm d-flex align-items-center justify-content-center"
+                    style="width: 38px; height: 38px;">
                     <i class="fas fa-leaf text-white small"></i>
                 </div>
-                <span>Farma<span class="text-success">Sense</span></span>
+                <span class="text-dark">Farma<span class="text-success">Sense</span></span>
             </a>
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav ms-auto gap-2 align-items-center">
                     <!-- Links for Logged-in Users -->
-                    <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link px-3 fw-semibold" th:href="@{/dashboard}">Dashboard</a></li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link px-3 fw-semibold" th:href="@{/market}">Market</a></li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link px-3 fw-semibold" th:href="@{/advisories}">Advisory</a></li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link px-3 fw-semibold" th:href="@{/weather}">Weather</a></li>
-                    
+                    <li class="nav-item" sec:authorize="isAuthenticated()"><a
+                            class="nav-link px-3 fw-semibold text-dark" th:href="@{/dashboard}">Dashboard</a></li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()"><a
+                            class="nav-link px-3 fw-semibold text-dark" th:href="@{/market}">Market</a></li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()"><a
+                            class="nav-link px-3 fw-semibold text-dark" th:href="@{/advisories}">Advisory</a></li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()"><a
+                            class="nav-link px-3 fw-semibold text-dark" th:href="@{/weather}">Weather</a></li>
+
                     <!-- Links for Guests -->
-                    <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link px-3 fw-semibold" th:href="@{/login}">Login</a></li>
-                    <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="btn btn-outline-success rounded-pill px-4 fw-bold ms-lg-2" th:href="@{/signup}">Sign Up</a></li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()"><a
+                            class="nav-link px-3 fw-semibold text-dark" th:href="@{/login}">Login</a></li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()"><a
+                            class="btn btn-outline-success rounded-pill px-4 fw-bold ms-lg-2" th:href="@{/signup}">Sign
+                            Up</a></li>
 
                     <!-- User Account Dropdown -->
                     <li class="nav-item ms-lg-3" sec:authorize="isAuthenticated()">
                         <div class="dropdown">
-                            <button class="btn btn-success rounded-pill px-4 fw-bold shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle me-2"></i><span sec:authentication="name">Account</span>
+                            <button class="btn btn-success rounded-pill px-4 fw-bold shadow-sm dropdown-toggle"
+                                type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-2"></i><span sec:authentication="name">admin</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 rounded-4 p-2">
-                                <li><a class="dropdown-item rounded-3 py-2 text-danger fw-bold" th:href="@{/logout}"><i class="fas fa-power-off me-2"></i>Sign Out</a></li>
+                                <li><a class="dropdown-item rounded-3 py-2 text-danger fw-bold" th:href="@{/logout}"><i
+                                            class="fas fa-power-off me-2"></i>Sign Out</a></li>
                             </ul>
                         </div>
                     </li>
@@ -39,5 +53,7 @@
             </div>
         </div>
     </header>
+
 </body>
+
 </html>

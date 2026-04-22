@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body class="bg-light d-flex flex-column min-vh-100">
 
     <!-- Header Fragment -->
@@ -17,25 +19,32 @@
     <div class="container mt-5 flex-grow-1">
         <div class="row justify-content-center">
             <div class="col-md-8 text-center py-5">
-                <div class="card border-0 shadow-sm p-5 rounded-4">
+                <div class="card border-0 shadow-lg p-5 rounded-4 bg-white">
                     <div class="mb-4">
-                        <i class="fas fa-user-shield fa-4x text-success"></i>
+                        <div class="avatar-lg sky-bg text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 100px; height: 100px;">
+                            <i class="fas fa-bridge fa-3x"></i>
+                        </div>
                     </div>
-                    <h2 class="fw-bold text-dark">Welcome to FarmaSense</h2>
-                    <p class="lead text-secondary mt-3">
-                        Your account is currently being processed or does not have a specific dashboard assigned yet.
+                    <h2 class="fw-bold text-dark text-gradient-sky">Node Connection Established</h2>
+                    <p class="lead text-gray mt-3">
+                        Your account identifier is active. You are currently in the bridge environment while your
+                        specific sectoral dashboard is being initialized.
                     </p>
-                    <hr class="my-4 mx-auto w-25">
-                    <p class="text-muted">
-                        Please contact the administrator if you believe this is an error, or use the menu above to explore the platform.
+                    <hr class="my-4 mx-auto w-25 border-primary opacity-25">
+                    <p class="text-gray small">
+                        Verify your credentials or explore available data modules via the primary navigation interface.
                     </p>
                     <div class="mt-4">
-                        <a th:href="@{/}" class="btn btn-success px-4 py-2 rounded-pill fw-bold">Back to Home</a>
+                        <a th:href="@{/}" class="btn btn-primary-sky px-5 py-3 rounded-pill fw-bold shadow-sm">
+                            <i class="fas fa-house-signal me-2"></i>Return to Nexus
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Footer Fragment -->
     <div th:replace="fragments/footer :: footer"></div>
@@ -43,4 +52,5 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

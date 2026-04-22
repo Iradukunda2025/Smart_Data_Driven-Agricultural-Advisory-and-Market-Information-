@@ -9,68 +9,114 @@
 
     <!-- HEADER FRAGMENT -->
     <header th:fragment="header">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm fixed-top">
             <div class="container">
-                <a class="navbar-brand fw-bold" th:href="@{/}">
-                    <i class="fas fa-leaf me-2"></i>FarmaSense
+                <a class="navbar-brand fw-bold d-flex align-items-center" th:href="@{/}">
+                    <i class="fas fa-satellite-dish me-2 fs-3 text-accent"></i>
+                    <span class="ls-1">FARMA<span class="text-accent">SENSE</span></span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" th:href="@{/}">Home</a>
+                            <a class="nav-link px-3" th:href="@{/}"
+                                th:classappend="${#httpServletRequest.requestURI == '/' ? 'active fw-bold' : ''}">Home</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link px-3" th:href="@{/dashboard}"
+                                th:classappend="${#httpServletRequest.requestURI == '/dashboard' ? 'active fw-bold' : ''}">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                            <a class="nav-link px-3" th:href="@{/weather}"
+                                th:classappend="${#httpServletRequest.requestURI == '/weather' ? 'active fw-bold' : ''}">Weather</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#features">Features</a>
+                            <a class="nav-link px-3" th:href="@{/market}"
+                                th:classappend="${#httpServletRequest.requestURI == '/market' ? 'active fw-bold' : ''}">Market</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-light text-success ms-3 fw-bold btn-sm" th:href="@{/login}">Login</a>
+                            <a class="nav-link px-3" th:href="@{/advisories}"
+                                th:classappend="${#httpServletRequest.requestURI == '/advisories' ? 'active fw-bold' : ''}">Advisory</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item" sec:authorize="!isAuthenticated()">
+                            <a class="btn btn-outline-light rounded-pill px-4 me-2 small fw-bold"
+                                th:href="@{/login}">Login</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="!isAuthenticated()">
+                            <a class="btn btn-light text-primary rounded-pill px-4 small fw-bold shadow-sm"
+                                th:href="@{/signup}">Join Us</a>
+                        </li>
+
+                        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center bg-white bg-opacity-10 rounded-pill px-3 py-1"
+                                href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-2 fs-5"></i>
+                                <span class="small fw-bold" sec:authentication="name">User</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2">
+                                <li><a class="dropdown-item py-2" th:href="@{/profile}"><i
+                                            class="fas fa-id-card me-2 text-primary opacity-50"></i> Profile</a></li>
+                                <li><a class="dropdown-item py-2" th:href="@{/activity}"><i
+                                            class="fas fa-clock-rotate-left me-2 text-primary opacity-50"></i>
+                                        Activity</a></li>
+                                <li>
+                                    <hr class="dropdown-divider opacity-10">
+                                </li>
+                                <li>
+                                    <form th:action="@{/logout}" method="post">
+                                        <button class="dropdown-item py-2 text-danger" type="submit">
+                                            <i class="fas fa-power-off me-2 opacity-50"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-        <!-- Spacer for fixed navbar -->
         <div style="height: 70px;"></div>
     </header>
 
 
     <!-- FOOTER FRAGMENT -->
-    <footer th:fragment="footer" class="bg-dark text-white py-4 mt-5">
+    <footer th:fragment="footer" class="bg-dark text-white py-5 mt-5">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <h5 class="text-success"><i class="fas fa-leaf me-2"></i>FarmaSense</h5>
-                    <p class="small text-secondary">Empowering farmers with smart insights on crop prices and weather
-                        patterns.</p>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-4 text-gradient-sky">FARMA<span class="text-white">SENSE</span></h5>
+                    <p class="text-gray small lh-lg">Empowering Rwandan agriculture through precision data and expert
+                        systems.</p>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <h6>Quick Links</h6>
+                <div class="col-md-4 ms-auto">
+                    <h6 class="fw-bold mb-4 text-white text-uppercase ls-1">Platform</h6>
                     <ul class="list-unstyled small">
-                        <li><a th:href="@{/}" class="text-decoration-none text-light">Home</a></li>
-                        <li><a th:href="@{/dashboard}" class="text-decoration-none text-light">Dashboard</a></li>
-                        <li><a href="#" class="text-decoration-none text-light">Privacy Policy</a></li>
+                        <li class="mb-2"><a th:href="@{/}" class="text-gray text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a th:href="@{/dashboard}" class="text-gray text-decoration-none">Dashboard</a>
+                        </li>
+                        <li class="mb-2"><a th:href="@{/weather}" class="text-gray text-decoration-none">Weather
+                                Engine</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <h6>Contact Us</h6>
-                    <p class="small text-secondary">
-                        <i class="fas fa-envelope me-2"></i> support@farmasense.com<br>
-                        <i class="fas fa-phone me-2"></i> +1 (555) 123-4567
+                <div class="col-md-3">
+                    <h6 class="fw-bold mb-4 text-white text-uppercase ls-1">Security</h6>
+                    <p class="small text-gray">
+                        <i class="fas fa-envelope-shield me-2"></i> support@farmasense.rw
                     </p>
                 </div>
             </div>
-            <hr class="border-secondary">
-            <div class="text-center small text-secondary">
-                &copy; 2026 FarmaSense. All rights reserved.
+            <hr class="border-secondary opacity-10">
+            <div class="text-center small text-gray pt-2">
+                &copy; 2026 FarmaSense. Intelligent Agricultural Governance.
             </div>
         </div>
     </footer>
+
 
     <!-- INACTIVITY TIMEOUT SCRIPT -->
     <script th:inline="javascript">
