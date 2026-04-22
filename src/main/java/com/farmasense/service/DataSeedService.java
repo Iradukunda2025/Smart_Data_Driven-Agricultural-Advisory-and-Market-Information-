@@ -4,6 +4,8 @@ import com.farmasense.model.*;
 import com.farmasense.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +14,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 @Component
-public class DataSeedService implements CommandLineRunner {
+public class DataSeedService {
 
     @Autowired
     private UserRepository userRepository;
@@ -35,8 +37,8 @@ public class DataSeedService implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Override
-    public void run(String... args) throws Exception {
+    @EventListener(ApplicationReadyEvent.class)
+    public void run(ApplicationReadyEvent event) throws Exception {
         // Seed Roles
         Role farmerRole = createRoleIfNotFound("ROLE_FARMER");
         Role vendorRole = createRoleIfNotFound("ROLE_VENDOR");

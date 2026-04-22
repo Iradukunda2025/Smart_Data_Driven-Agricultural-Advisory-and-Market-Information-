@@ -148,13 +148,6 @@ public class WebController {
         }
     }
 
-    @GetMapping("/admin/users")
-    public String manageUsers(org.springframework.ui.Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        model.addAttribute("roles", roleRepository.findAll());
-        return "users";
-    }
-
     @GetMapping("/advisories")
     public String viewAdvisories(org.springframework.ui.Model model) {
         model.addAttribute("advisories", advisoryRepository != null ? advisoryRepository.findAll() : java.util.Collections.emptyList());

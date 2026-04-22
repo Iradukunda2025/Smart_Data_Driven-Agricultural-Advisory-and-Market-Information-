@@ -4,6 +4,8 @@ import com.farmasense.model.*;
 import com.farmasense.repository.*;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,7 +30,7 @@ public class DataInitializationService {
     @Autowired
     private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     public void initData() {
         // Initialize Roles
         Role adminRole = createRoleIfNotFound("ROLE_ADMIN");

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
  
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
  
@@ -121,5 +122,31 @@ public class UserService {
         user.setVerified(true);
         user.setEnabled(true);
         userRepository.save(user);
+    }
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Transactional
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void updateUser(User user) {
+        User existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+        
+        existingUser.setFullName(user.getFullName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPhoneNumber(user.getPhoneNumber());
+        existingUser.setEnabled(user.isEnabled());
+        existingUser.setVerified(user.isVerified());
+        
+        userRepository.save(existingUser);
     }
 }

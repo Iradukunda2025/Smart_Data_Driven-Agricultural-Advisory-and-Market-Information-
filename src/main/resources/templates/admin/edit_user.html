@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit User - FarmaSense Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .edit-card {
+            max-width: 600px;
+            margin: 50px auto;
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            background: white;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div th:replace="fragments/header :: header"></div>
+
+    <div class="container">
+        <div class="edit-card">
+            <div class="text-center mb-5">
+                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <i class="fas fa-user-pen fa-2x"></i>
+                </div>
+                <h3 class="fw-bold">Modify User Account</h3>
+                <p class="text-muted small">Update profile information for <span class="text-primary fw-bold" th:text="${user.username}">user</span></p>
+            </div>
+
+            <form th:action="@{/admin/users/update}" method="post">
+                <input type="hidden" name="id" th:value="${user.id}">
+                
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Full Name</label>
+                    <input type="text" name="fullName" th:value="${user.fullName}" class="form-control rounded-3 py-2" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Email Address</label>
+                    <input type="email" name="email" th:value="${user.email}" class="form-control rounded-3 py-2" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Phone Number</label>
+                    <input type="text" name="phoneNumber" th:value="${user.phoneNumber}" class="form-control rounded-3 py-2">
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <div class="form-check form-switch p-3 bg-light rounded-3">
+                            <input class="form-check-input ms-0 me-2" type="checkbox" name="enabled" th:checked="${user.enabled}" id="enabledSwitch">
+                            <label class="form-check-label small fw-bold" for="enabledSwitch">Account Enabled</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-check form-switch p-3 bg-light rounded-3">
+                            <input class="form-check-input ms-0 me-2" type="checkbox" name="verified" th:checked="${user.verified}" id="verifiedSwitch">
+                            <label class="form-check-label small fw-bold" for="verifiedSwitch">Verified Status</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 mt-4">
+                    <a th:href="@{/admin/users}" class="btn btn-light rounded-pill px-4 flex-grow-1">Cancel</a>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 flex-grow-1 fw-bold">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
