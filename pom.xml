@@ -9,7 +9,7 @@
     <groupId>com.farmasense</groupId>
     <artifactId>FarmaSense</artifactId>
     <version>1.0.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>FarmaSense</name>
     <description>Smart Crop Price &amp; Weather Advisory System</description>
