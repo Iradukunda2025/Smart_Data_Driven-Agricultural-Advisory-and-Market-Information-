@@ -51,17 +51,29 @@ public class UserService {
             throw new RuntimeException("Password must be at least 6 characters long!");
         }
  
-        // Create User (Enabled immediately as OTP is removed)
+        // Create User (Disabled until OTP verification)
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setFullName(fullName);
         user.setPhoneNumber(phoneNumber);
         user.setPassword(passwordEncoder.encode(password));
-        user.setEnabled(true); // ENABLED immediately
-        user.setVerified(true); // VERIFIED immediately
-        user.setVerificationCode(null);
-        user.setVerificationCodeExpiry(null);
+        user.setEnabled(false); // DISABLED until verified
+        user.setVerified(false); // NOT VERIFIED
+        
+        // Generate 6-digit OTP
+        String otp = String.format("%06d", new java.util.Random().nextInt(1000000));
+        user.setVerificationCode(otp);
+        user.setVerificationCodeExpiry(java.time.LocalDateTime.now().plusMinutes(15));
+        
+        System.out.println(">>> DEBUG: OTP for " + username + " is " + otp); // For testing locally
+        
+        // Send Email
+        try {
+            emailService.sendVerificationOtp(email, fullName, otp);
+        } catch (Exception e) {
+            System.err.println("!!! ERROR: Failed to send email: " + e.getMessage());
+        }
  
         String normalizedRole = roleName.toUpperCase();
         if (!normalizedRole.startsWith("ROLE_")) {

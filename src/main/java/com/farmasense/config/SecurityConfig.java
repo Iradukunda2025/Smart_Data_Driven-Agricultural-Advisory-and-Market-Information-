@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionFixation().migrateSession()
                 .and()
             .authorizeRequests()
-                .antMatchers("/", "/index", "/signup", "/error", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico", "/*.jpg", "/*.png", "/*.webp", "/api/auth/**").permitAll()
+                .antMatchers("/", "/index", "/signup", "/verify-otp", "/error", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico", "/*.jpg", "/*.png", "/*.webp", "/api/auth/**").permitAll()
                 .antMatchers("/api/v1/market-prices", "/api/v1/market-prices/**").authenticated()
                 .antMatchers("/admin/users/**").hasRole("ADMIN")
                 .antMatchers("/admin/weather/**", "/admin/market/**", "/admin/advisories/**").hasAnyRole("ADMIN", "VENDOR")

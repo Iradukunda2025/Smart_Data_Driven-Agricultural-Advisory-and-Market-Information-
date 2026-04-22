@@ -248,10 +248,30 @@ public class WebController {
                                org.springframework.ui.Model model) {
         try {
             userService.registerUser(username, email, fullName, phoneNumber, password, role);
-            return "redirect:/login?registered";
+            // Redirect to OTP verification page after successful registration
+            return "redirect:/verify-otp?username=" + username + "&email=" + email;
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "signup";
+        }
+    }
+
+    @GetMapping("/verify-otp")
+    public String showVerifyOtpPage(@RequestParam String username, @RequestParam(required = false) String email, org.springframework.ui.Model model) {
+        model.addAttribute("username", username);
+        model.addAttribute("email", email);
+        return "verify_otp";
+    }
+
+    @PostMapping("/verify-otp")
+    public String verifyOtp(@RequestParam String username, @RequestParam String code, org.springframework.ui.Model model) {
+        try {
+            userService.verifyOtp(username, code);
+            return "redirect:/login?verified";
+        } catch (Exception e) {
+            model.addAttribute("username", username);
+            model.addAttribute("error", e.getMessage());
+            return "verify_otp";
         }
     }
     @PostMapping("/admin/advisories/add")
@@ -282,12 +302,12 @@ public class WebController {
         try {
             if (advisoryRepository.existsById(id)) {
                 advisoryRepository.deleteById(id);
-                return "redirect:/admin/advisories?deleted";
+                return "redirect:/advisories?deleted";
             }
         } catch (Exception e) {
-            return "redirect:/admin/advisories?error";
+            return "redirect:/advisories?error";
         }
-        return "redirect:/admin/advisories";
+        return "redirect:/advisories";
     }
 
     @PostMapping("/admin/advisories/update")
@@ -298,9 +318,9 @@ public class WebController {
             advisory.setDescription(description);
             advisory.setDate(java.time.LocalDate.parse(date));
             advisoryRepository.save(advisory);
-            return "redirect:/admin/advisories?updated";
+            return "redirect:/advisories?updated";
         } catch (Exception e) {
-            return "redirect:/admin/advisories?error=" + (e.getMessage() != null ? e.getMessage() : "Update failed");
+            return "redirect:/advisories?error=" + (e.getMessage() != null ? e.getMessage() : "Update failed");
         }
     }
 

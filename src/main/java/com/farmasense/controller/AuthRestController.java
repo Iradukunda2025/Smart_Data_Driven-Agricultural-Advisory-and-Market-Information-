@@ -53,6 +53,19 @@ public class AuthRestController {
         }
     }
 
+    @PostMapping("/verify-otp")
+    public ResponseEntity<Map<String, String>> verifyOtp(@RequestBody Map<String, String> request) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            userService.verifyOtp(request.get("username"), request.get("code"));
+            response.put("message", "Account verified successfully");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
     // ──────────────────────────────────────────
     // POST /api/auth/login
     // Expects JSON: { "username": "...", "password": "..." }
