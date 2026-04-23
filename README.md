@@ -52,9 +52,11 @@ The project is live on Render. For deployment details read about deployment phas
 
 
 
-USER TEST CREDENTIALS
+USER TEST CREDENTIALS:
+
 The most cridentials required is Admin cridentials. Others users can register and choose role of those user (between Farmer and Vendor)
-UserRole	Username	  Password
+
+UserRole:	Username:  Password:
 Admin	    admin	      Admin123
 Vendor	  Gikundiro 	Kigali@123	
 Farmer  	Jose	      Kigali@123
