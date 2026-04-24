@@ -72,7 +72,7 @@
             <div class="col-md-4">
                 <div class="dashboard-card p-4">
                     <div class="stat-badge mb-3"><i class="fas fa-user-check"></i></div>
-                    <h3 class="fw-bold mb-1" sec:authentication="name">Officer</h3>
+                    <h3 class="fw-bold mb-1" th:text="${vendorProfile != null ? vendorProfile.name : 'Officer'}">Officer</h3>
                     <p class="text-muted small fw-bold text-uppercase mb-0">Active Controller</p>
                 </div>
             </div>
@@ -82,7 +82,7 @@
             <div class="col-lg-8">
                 <div class="dashboard-card overflow-hidden">
                     <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 class="fw-bold mb-0">Crop Price Registry</h5>
+                        <h5 class="fw-bold mb-0">My Price Registry</h5>
                         <button class="btn btn-success fw-bold px-4 rounded-3" data-bs-toggle="modal"
                             data-bs-target="#addPriceModal">
                             <i class="fas fa-plus me-2"></i>New Entry

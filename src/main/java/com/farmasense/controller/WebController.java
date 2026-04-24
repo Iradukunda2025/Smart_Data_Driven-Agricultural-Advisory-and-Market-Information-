@@ -21,6 +21,12 @@ public class WebController {
         return "Controller is working!";
     }
 
+    @GetMapping("/api/ping")
+    @ResponseBody
+    public String ping() {
+        return "FarmaSense System is Online and Active";
+    }
+
     @GetMapping("/login")
     public String login(org.springframework.security.core.Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
@@ -81,14 +87,33 @@ public class WebController {
     }
 
     @GetMapping("/dashboard/farmer")
-    public String farmerDashboard(org.springframework.ui.Model model) {
+    public String farmerDashboard(org.springframework.security.core.Authentication authentication, org.springframework.ui.Model model) {
         try {
+            String username = authentication.getName();
+            com.farmasense.model.User user = userRepository.findByUsername(username).orElse(null);
+            com.farmasense.model.Farmer farmer = null;
+            
+            if (user != null) {
+                farmer = farmerRepository.findByContact(user.getPhoneNumber()).orElse(null);
+            }
+
+            java.util.List<com.farmasense.model.WeatherInfo> weatherRecords;
+            if (farmer != null && farmer.getLocation() != null && !farmer.getLocation().equalsIgnoreCase("Not Specified")) {
+                weatherRecords = weatherInfoRepository.findByRegionContainingIgnoreCase(farmer.getLocation());
+                model.addAttribute("userRegion", farmer.getLocation());
+            } else {
+                weatherRecords = weatherInfoRepository.findAll();
+                model.addAttribute("userRegion", "All Regions");
+            }
+
+            model.addAttribute("farmerProfile", farmer);
             model.addAttribute("advisories", advisoryRepository != null ? advisoryRepository.findAll() : java.util.Collections.emptyList());
             model.addAttribute("marketPrices", marketPriceRepository != null ? marketPriceRepository.findAll() : java.util.Collections.emptyList());
-            model.addAttribute("weatherRecords", weatherInfoRepository != null ? weatherInfoRepository.findAll() : java.util.Collections.emptyList());
+            model.addAttribute("weatherRecords", weatherRecords);
             model.addAttribute("notifications", notificationService != null ? notificationService.getLatestNotifications() : java.util.Collections.emptyList());
             return "farmer_dashboard";
         } catch (Exception e) {
+            System.err.println("!!! FARMER DASHBOARD ERROR: " + e.getMessage());
             model.addAttribute("advisories", java.util.Collections.emptyList());
             model.addAttribute("marketPrices", java.util.Collections.emptyList());
             model.addAttribute("weatherRecords", java.util.Collections.emptyList());
@@ -98,13 +123,25 @@ public class WebController {
     }
 
     @GetMapping("/dashboard/vendor")
-    public String vendorDashboard(org.springframework.ui.Model model) {
+    public String vendorDashboard(org.springframework.security.core.Authentication authentication, org.springframework.ui.Model model) {
         try {
-            java.util.List<?> prices = (marketPriceRepository != null) ? marketPriceRepository.findAll() : java.util.Collections.emptyList();
-            java.util.List<?> notice = (notificationService != null) ? notificationService.getLatestNotifications() : java.util.Collections.emptyList();
+            String username = authentication.getName();
+            com.farmasense.model.User user = userRepository.findByUsername(username).orElse(null);
+            com.farmasense.model.Vendor vendor = null;
             
-            model.addAttribute("marketPrices", prices != null ? prices : java.util.Collections.emptyList());
-            model.addAttribute("notifications", notice != null ? notice : java.util.Collections.emptyList());
+            if (user != null) {
+                vendor = vendorRepository.findByContact(user.getPhoneNumber()).orElse(null);
+            }
+
+            java.util.List<?> myPrices = java.util.Collections.emptyList();
+            if (vendor != null) {
+                myPrices = marketPriceRepository.findByAssociatedVendor(vendor);
+            }
+
+            model.addAttribute("vendorProfile", vendor);
+            model.addAttribute("marketPrices", myPrices);
+            model.addAttribute("allMarketPrices", marketPriceRepository.findAll());
+            model.addAttribute("notifications", notificationService != null ? notificationService.getLatestNotifications() : java.util.Collections.emptyList());
             
             // Shared fragment stabilizers
             model.addAttribute("users", java.util.Collections.emptyList());
@@ -113,7 +150,7 @@ public class WebController {
             
             return "vendor_dashboard";
         } catch (Exception e) {
-            System.err.println("!!! FINAL FAILSAFE TRIGGERED: " + e.getMessage());
+            System.err.println("!!! VENDOR DASHBOARD ERROR: " + e.getMessage());
             model.addAttribute("marketPrices", java.util.Collections.emptyList());
             model.addAttribute("notifications", java.util.Collections.emptyList());
             model.addAttribute("users", java.util.Collections.emptyList());
@@ -126,6 +163,19 @@ public class WebController {
     @GetMapping("/dashboard/admin")
     public String adminDashboard(org.springframework.ui.Model model) {
         try {
+            // Metrics
+            long userCount = userRepository.count();
+            long farmerCount = farmerRepository.count();
+            long vendorCount = vendorRepository.count();
+            long advisoryCount = advisoryRepository.count();
+            long weatherCount = weatherInfoRepository.count();
+
+            model.addAttribute("userCount", userCount);
+            model.addAttribute("farmerCount", farmerCount);
+            model.addAttribute("vendorCount", vendorCount);
+            model.addAttribute("advisoryCount", advisoryCount);
+            model.addAttribute("weatherCount", weatherCount);
+
             model.addAttribute("users", 
                 userRepository != null ? userRepository.findAll() : java.util.Collections.emptyList());
             model.addAttribute("marketPrices", 

@@ -16,4 +16,7 @@ public interface MarketPriceRepository extends JpaRepository<MarketPrice, Long> 
 
     /** Find prices for a crop within a date range. */
     List<MarketPrice> findByCropIgnoreCaseAndDateBetween(String crop, LocalDate from, LocalDate to);
+
+    /** Find prices posted by a specific vendor. */
+    List<MarketPrice> findByAssociatedVendor(com.farmasense.model.Vendor vendor);
 }
