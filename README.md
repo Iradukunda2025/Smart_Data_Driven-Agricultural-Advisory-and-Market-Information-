@@ -142,10 +142,6 @@ Farmer  	Jose	      Kigali@123
 - Login: /login
 - Sign Up: /signup
 - Dashboard: /dashboard (Auto-redirects)
+- Heartbeat (Keep-Alive): /api/ping
+
 Security Note: Always ensure OTP verification is completed before attempting to log in.
-
- 
-
-
-
->>>>>>> a560d3629ab73c2d74927418cef66fb2e6960481
